@@ -1,0 +1,18 @@
+lazy DJ
+changing backgroup photo from a public source - think deviant art / suicide sheep
+ability to take an artist or song and start a music playlist FOR FREE
+find out as much as you can about the artist / song initally. provide way for user to access this content
+
+Design
+keep the page clean
+no need for more than one page
+simple
+able to display videos
+
+Version 1.0
+slideshow background - resizeable
+text box that takes input - looks fancy
+
+Version 2.0
+getting images from public sources to power the slideshow
+Reseach how to inbed youtube/soundcloud
