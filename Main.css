@@ -1,71 +1,115 @@
-* {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+ul{
+	list-style: none;
+}
+.cb-slideshow,
+.cb-slideshow:after{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	z-index: 0;
 }
 
-.grid {
-  background: white;
-  margin: 0 0 20px 0;
-}
-.grid:after {
-  /* Or @extend clearfix */
-  content: "";
-  display: table;
-  clear: both;
+.cb-slideshow:after{
+	content: '';
+	background: transparent url(../images/pattern.png) repeat top left;
 }
 
-[class*='col-'] {
-  float: left;
-  padding-right: 20px;
-}
-.grid [class*='col-']:last-of-type {
-  padding-right: 0;
-}
-
-.col-2-3 {
-  width: 66.66%;
-}
-
-.col-1-3 {
-  width: 33.33%;
-}
-
-.col-1-2 {
-  width: 50%;
+.cb-slideshow li span{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	color: transparent;
+	background-size: cover;
+	background-position: 50% 50%;
+	background-repeat: none;
+	opacity: 0;
+	z-index: 0;
+	animation: imageAnimation 36s linear infinite 0s;
 }
 
-.col-1-4 {
-  width: 25%;
+.cb-slideshow li div{
+	z-index: 1000;
+	position: absolute;
+	bottom: 50px;
+	left: 0px;
+	width: 100%;
+	text-align: center;
+	opacity: 0;
+	color: #fff;
+	animation: titleAnimation 36s linear infinite 0s;
 }
 
-.col-1-8 {
-  width: 12.5%;
+.cb-slideshow li div h3{
+	font-family: Rockwell;
+	font-size: 80px;
+	padding:0;
+	line-height: 80px;
+	font-style: italic;
 }
 
-.module {
-  padding: 20px;
-  background: #eee;
+.cb-slideshow li:nth-child(1) span { 
+    background-image: url(http://www.hdwallpaperscool.com/wp-content/uploads/2013/11/california-beautiful-natyre-hd-wallpapers-widescreen-cool-images.jpg)  
+}
+.cb-slideshow li:nth-child(2) span { 
+    background-image: url(http://www.hdwallpaperscool.com/wp-content/uploads/2013/11/nature-landscape-photography-lanscape-cool-hd-wallpapers-fullscreen-high-resolution.jpg);
+    animation-delay: 6s; 
+}
+.cb-slideshow li:nth-child(3) span { 
+    background-image: url(http://www.freelargeimages.com/wp-content/uploads/2015/07/Nature_Wallpaper_Hd_02.jpg);
+    animation-delay: 12s; 
+}
+.cb-slideshow li:nth-child(4) span { 
+    background-image: url(http://www.freelargeimages.com/wp-content/uploads/2015/07/Nature_Wallpaper_Hd_01.jpg);
+    animation-delay: 18s; 
+}
+.cb-slideshow li:nth-child(5) span { 
+    background-image: url(http://ewallpaper-hub.com/wp-content/uploads/2015/07/Full-HD-Wallpapers-Nature-7.jpg);
+    animation-delay: 24s; 
+}
+.cb-slideshow li:nth-child(6) span { 
+    background-image: url(http://vefego.com/nature-hd-wallpaper-desktop-background-27mvmi);
+    animation-delay: 30s; 
 }
 
-/* Opt-in outside padding */
-.grid-pad {
-  padding: 20px 0 20px 20px;
+.cb-slideshow li:nth-child(2) div { 
+    animation-delay: 6s; 
 }
-.grid-pad [class*='col-']:last-of-type {
-  padding-right: 20px;
+.cb-slideshow li:nth-child(3) div { 
+    animation-delay: 12s; 
+}
+.cb-slideshow li:nth-child(4) div { 
+    animation-delay: 18s; 
+}
+.cb-slideshow li:nth-child(5) div { 
+    animation-delay: 24s; 
+}
+.cb-slideshow li:nth-child(6) div { 
+    animation-delay: 30s; 
 }
 
-body {
-  padding: 10px 50px 200px;
-  background: url(http://s.cdpn.io/3/dark_wall_@2X.png);
-  background-size: 300px 300px;
+@keyframes imageAnimation { 
+    0% { opacity: 0; animation-timing-function: ease-in; }
+    8% { opacity: 1; animation-timing-function: ease-out; }
+    17% { opacity: 1 }
+    25% { opacity: 0 }
+    100% { opacity: 0 }
 }
 
-h1 {
-  color: white;
+@keyframes titleAnimation { 
+    0% { opacity: 0 }
+    8% { opacity: 1 }
+    17% { opacity: 0 }
+    19% { opacity: 0 }
+    100% { opacity: 0 }
 }
-h1 em {
-  color: #666;
-  font-size: 16px;
+
+@media screen and (max-width: 1140px) { 
+    .cb-slideshow li div h3 { font-size: 140px }
+}
+@media screen and (max-width: 600px) { 
+    .cb-slideshow li div h3 { font-size: 80px }
 }
