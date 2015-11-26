@@ -1,0 +1,21 @@
+@media screen and (max-width: 767px){
+	.navbar-header{
+		text-align: center;
+	}
+}
+
+.navbar-brand{
+	display: inline-block;
+	float: none;
+	font : white;
+
+}
+.navbar-toggle{
+	float: left;
+	color: #FFF;
+}
+
+canvas{
+	height: 100%;
+	width: 100%;
+}
