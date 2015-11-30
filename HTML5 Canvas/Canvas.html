@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <link rel="stylesheet" type="text/css" href="Canvas.css">
     <style type="text/css"></style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
 </head> 
 <body>
     <div class="container">
@@ -39,16 +40,16 @@
     <script> 
         
         var canvas = document.getElementById("MainCanvas");
+        console.log(canvas);
         var context = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        var imageObj = new Image();  
+        imageObj.onload= function() {
         var wRatio = canvas.width / imageObj.width;
         var hRatio = canvas.height / imageObj.height;
         var ratio = Math.min (wRatio, hRatio);
-       
-        var imageObj = new Image();  
-        imageObj.onload= function() {
-            context.drawImage(imageObj, 0, 0, canvas.width, canvas.height,imageObj.width*ratio, imageObj.height*ratio);
+            context.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
            
             
         
