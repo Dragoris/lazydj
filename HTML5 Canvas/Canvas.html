@@ -30,7 +30,7 @@
                  </ul>
                 <form role="search" class="navbar-form navbar-right">
                     <div class="form-group">
-                        <input type="text" placeholder="Search" class="form-control">
+                        <input type="text" placeholder="Search" class="form-control" id="search-box">
                     </div>
                 </form>
             </div>
@@ -46,8 +46,20 @@
     <script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
     <script>
         var canvas = document.getElementById("MainCanvas");
+        // grabbing the div to inject the iframe soundcloud player
         var player = document.getElementById("player");
-        console.log(canvas);
+        // grabbing the text in the search box, may be null
+        var search_result;
+        // function listen for the enter button being pressed on the search box
+        $("#search-box").bind("keypress", function(event) {
+            if(event.which == 13) {
+                event.preventDefault();
+                search_result = document.getElementById("search-box").value;
+                if(search_result != null) {
+                    console.log("search result: ", search_result);
+                }
+            }
+        });
         var context = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -60,9 +72,11 @@
         };
         imageObj.src = "Boose Boosington.jpg";
 
+        // initializing soundcloud
+        // uncomment redirect_url to add authentication, also add a comma
         SC.initialize({
-            client_id: 'b11dd654670362e6d5b12263d9f51b78',
-            redirect_uri: 'http://lazydj.net/callback.html'
+            client_id: 'b11dd654670362e6d5b12263d9f51b78'
+            //redirect_uri: 'http://lazydj.net/callback.html'
         });
 
         // initiate auth popup
@@ -72,20 +86,24 @@
             alert('Hello, ' + me.username);
         });
         function playSomeSound(genre) {
+            // getting an array of tracks that match the options
             SC.get('/tracks', {genre : genre}).then(function (response) {
                 console.log("genre", genre);
+                // creating a random number between 0 - 49 to pick a random track
                 var random = Math.floor(Math.random() * 49);
                 console.log("this is the response", response);
                 console.log("random", random);
                 console.log(response[random]);
+                // using the soundcloud embed get the iframe player
                 SC.oEmbed(response[random].uri, {element: player}).then(function (embed) {
                     console.log("embed", embed);
+                    // injecting the iframe html returned into our div element
                     player.value = embed.html;
                 });
             });
         }
 
-
+        // sort of a broken method for adding a onclick handler to our list
         var menuLinks = document.getElementsByClassName('genre');
         for (var i = 0; i < menuLinks.length; i++) {
             console.log(i);
@@ -93,6 +111,7 @@
             menuLink.onclick = function(e) {
                 //console.log (menuLink.innerHTML);
                 e.preventDefault();
+                // calls playsomesound function to play a track
                 playSomeSound("dubstep");
             };
         }
