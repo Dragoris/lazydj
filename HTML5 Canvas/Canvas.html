@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="Canvas.css">
     <style type="text/css"></style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-</head> 
+</head>
 <body>
     <div class="container">
         <nav role="navigation" class="navbar navbar-inverse">
@@ -36,43 +36,70 @@
             </div>
         </nav>
     </div>
+    <ul>
+        <li class= "genre"><a href="#">dubstep</a></li>
+        <li class= "genre"><a href="#">electronic</a></li>
+        <li class= "genre"><a href="#">punk</a></li>
+    </ul>
+    <div id="player"></div>
     <canvas id="MainCanvas"></canvas>
-    <script> 
-        
+    <script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
+    <script>
         var canvas = document.getElementById("MainCanvas");
+        var player = document.getElementById("player");
         console.log(canvas);
         var context = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        var imageObj = new Image();  
-        imageObj.onload= function() {
-        var wRatio = canvas.width / imageObj.width;
-        var hRatio = canvas.height / imageObj.height;
-        var ratio = Math.min (wRatio, hRatio);
+        var imageObj = new Image();
+        imageObj.onload = function () {
+            var wRatio = canvas.width / imageObj.width;
+            var hRatio = canvas.height / imageObj.height;
+            var ratio = Math.min(wRatio, hRatio);
             context.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
-           
-            
-        
         };
-                imageObj.src="Boose Boosington.jpg";
+        imageObj.src = "Boose Boosington.jpg";
 
-    </script>
-    <script>
         SC.initialize({
-        client_id: 'b11dd654670362e6d5b12263d9f51b78',
-        redirect_uri: 'http://lazydj.net/callback.html'
+            client_id: 'b11dd654670362e6d5b12263d9f51b78',
+            redirect_uri: 'http://lazydj.net/callback.html'
         });
 
         // initiate auth popup
-        SC.connect().then(function() {
+        SC.connect().then(function () {
             return SC.get('/me');
-        }).then(function(me) {
-        alert('Hello, ' + me.username);
+        }).then(function (me) {
+            alert('Hello, ' + me.username);
         });
+        function playSomeSound(genre) {
+            SC.get('/tracks', {genre : genre}).then(function (response) {
+                console.log("genre", genre);
+                var random = Math.floor(Math.random() * 49);
+                console.log("this is the response", response);
+                console.log("random", random);
+                console.log(response[random]);
+                SC.oEmbed(response[random].uri, {element: player}).then(function (embed) {
+                    console.log("embed", embed);
+                    player.value = embed.html;
+                });
+            });
+        }
+
+
+        var menuLinks = document.getElementsByClassName('genre');
+        for (var i = 0; i < menuLinks.length; i++) {
+            console.log(i);
+            var menuLink = menuLinks[i];
+            menuLink.onclick = function(e) {
+                //console.log (menuLink.innerHTML);
+                e.preventDefault();
+                playSomeSound("dubstep");
+            };
+        }
+
     </script>
 
-<script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
-</html>                                   
+</html>
