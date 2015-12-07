@@ -2,24 +2,28 @@
 <html lang="en">
 <head>
     <title>LazyDJ</title>
+	<!-- Loading external style sheets -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
+	<!-- Loading our own style sheet -->
     <link rel="stylesheet" type="text/css" href="Canvas.css">
     <style type="text/css"></style>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
 </head>
 <body>
+    <!-- div to hold the nav and search bar -->
     <div class="container">
         <nav role="navigation" class="navbar navbar-inverse">
-            <!-- Brand and toggle get grouped for better mobile display -->
+            <!-- Brand and toggle get grouped for better mobile display, kinda broken -->
             <div class="navbar-header">
                 <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
                     <span class="sr-only">Toggle navigation</span>
                 </button>
                 <a href="#" class="navbar-brand">LazyDJ</a>
             </div>
-            <!-- Collection of nav links, forms, and other content for toggling -->
+            <!-- Populating the Nav bar with Nav links... but we don't need any right now just home link (brand) & search-->
             <div id="navbarCollapse" class="collapse navbar-collapse">
+			    <!-- search bar defined -->
                 <form role="search" class="navbar-form navbar-right">
                     <div class="form-group">
                         <input type="text" placeholder="Search" class="form-control" id="search-box">
@@ -28,13 +32,17 @@
             </div>
         </nav>
     </div>
+	<!-- Our testing links for Soundcloud embed. TODO get rid of -->
     <ul>
         <li class= "genre"><a href="#">dubstep</a></li>
         <li class= "genre"><a href="#">electronic</a></li>
         <li class= "genre"><a href="#">punk</a></li>
     </ul>
+	<!-- div that we are injecting the iembed play returned from soundcloud -->
     <div id="player"></div>
+	<!-- Boose's Face = canvas -->
     <canvas id="MainCanvas"></canvas>
+	<!-- Loading up the js libraries we will be using in the following js code -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
     <script>
@@ -66,7 +74,6 @@
         imageObj.src = "Boose Boosington.jpg";
 
         // initializing soundcloud
-        // uncomment redirect_url to add authentication, also add a comma
         SC.initialize({
             client_id: 'b11dd654670362e6d5b12263d9f51b78',
             redirect_uri: 'http://lazydj.net/callback.html'
@@ -110,7 +117,6 @@
         }
 
     </script>
-
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
 </html>
