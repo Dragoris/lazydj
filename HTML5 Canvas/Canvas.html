@@ -2,68 +2,136 @@
 <html lang="en">
 <head>
     <title>LazyDJ</title>
+    <!-- Loading external style sheets -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
+    <!-- Loading our own style sheet -->
     <link rel="stylesheet" type="text/css" href="Canvas.css">
     <style type="text/css"></style>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-</head> 
+</head>
 <body>
+    <!-- div to hold the nav and search bar -->
     <div class="container">
         <nav role="navigation" class="navbar navbar-inverse">
-            <!-- Brand and toggle get grouped for better mobile display -->
+            <!-- Brand and toggle get grouped for better mobile display, kinda broken -->
             <div class="navbar-header">
                 <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
                     <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
                 </button>
                 <a href="#" class="navbar-brand">LazyDJ</a>
             </div>
-            <!-- Collection of nav links, forms, and other content for toggling -->
+            <!-- Populating the Nav bar with Nav links... but we don't need any right now just home link (brand) & search-->
             <div id="navbarCollapse" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Playlists</a></li>
-                    <li><a href="#">Profile</a></li>
-                    <li><a href="#">Settings</a></li>
-                 </ul>
+                <!-- search bar defined -->
                 <form role="search" class="navbar-form navbar-right">
                     <div class="form-group">
-                        <input type="text" placeholder="Search" class="form-control">
+                        <input type="text" placeholder="Search" class="form-control" id="search-box">
                     </div>
                 </form>
             </div>
         </nav>
     </div>
+   <input id="menu-trigger" type="checkbox" />
+   <label for="menu-trigger">&#9836</label>
+
+   <header>
+        <ul class="menu">
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+        </ul>
+    </header>
+
+    <div id="content">
+
+    </div>
+
+
+
+    <!-- Our testing links for Soundcloud embed. TODO get rid of -->
+    <ul>
+        <li class= "genre"><a href="#">dubstep</a></li>
+        <li class= "genre"><a href="#">electronic</a></li>
+        <li class= "genre"><a href="#">punk</a></li>
+    </ul>
+    <!-- div that we are injecting the iembed play returned from soundcloud -->
+    <div id="player"></div>
+    <!-- Boose's Face = canvas -->
     <canvas id="MainCanvas"></canvas>
-    <script> 
-        
+    <!-- Loading up the js libraries we will be using in the following js code -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
+    <script>
         var canvas = document.getElementById("MainCanvas");
-        console.log(canvas);
+        // grabbing the div to inject the iframe soundcloud player
+        var player = document.getElementById("player");
+        // grabbing the text in the search box, may be null
+        var search_result;
+        // function listen for the enter button being pressed on the search box
+        $("#search-box").bind("keypress", function(event) {
+            if(event.which == 13) {
+                event.preventDefault();
+                search_result = document.getElementById("search-box").value;
+                if(search_result != null) {
+                    console.log("search result: ", search_result);
+                }
+            }
+        });
         var context = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        var imageObj = new Image();  
-        imageObj.onload= function() {
-        var wRatio = canvas.width / imageObj.width;
-        var hRatio = canvas.height / imageObj.height;
-        var ratio = Math.min (wRatio, hRatio);
+        var imageObj = new Image();
+        imageObj.onload = function () {
+            var wRatio = canvas.width / imageObj.width;
+            var hRatio = canvas.height / imageObj.height;
+            var ratio = Math.min(wRatio, hRatio);
             context.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
-           
-            
-        
         };
-                imageObj.src="Boose Boosington.jpg";
-
-            
-
+        imageObj.src = "Boose Boosington.jpg";
+        // initializing soundcloud
+        SC.initialize({
+            client_id: 'b11dd654670362e6d5b12263d9f51b78',
+            redirect_uri: 'http://lazydj.net/callback.html'
+        });
+        // initiate auth popup
+        SC.connect().then(function () {
+            return SC.get('/me');
+        }).then(function (me) {
+            alert('Hello, ' + me.username);
+        });
+        function playSomeSound(genre) {
+            // getting an array of tracks that match the options
+            SC.get('/tracks', {genre : genre}).then(function (response) {
+                console.log("genre", genre);
+                // creating a random number between 0 - 49 to pick a random track
+                var random = Math.floor(Math.random() * 49);
+                console.log("this is the response", response);
+                console.log("random", random);
+                console.log(response[random]);
+                // using the soundcloud embed get the iframe player
+                SC.oEmbed(response[random].uri, {element: player}).then(function (embed) {
+                    console.log("embed", embed);
+                    // injecting the iframe html returned into our div element
+                    player.value = embed.html;
+                });
+            });
+        }
+        // sort of a broken method for adding a onclick handler to our list
+        var menuLinks = document.getElementsByClassName('genre');
+        for (var i = 0; i < menuLinks.length; i++) {
+            console.log(i);
+            var menuLink = menuLinks[i];
+            menuLink.onclick = function(e) {
+                //console.log (menuLink.innerHTML);
+                e.preventDefault();
+                // calls playsomesound function to play a track
+                playSomeSound("dubstep");
+            };
+        }
     </script>
-
-
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
-</html>                                   
+</html>
