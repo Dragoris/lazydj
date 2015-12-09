@@ -30,9 +30,37 @@ canvas{
     display:block;
 
 }
+#button {
+    cursor:pointer;
+}
+#menu li a {
+    padding: 10px;
+    display: block;
+    color: white;
+    text-decoration: none;
+}
+#right {
+    background-color: #fff;
+    z-index: 5;
+    position: relative;
+    left: 0px;
+	height: auto;
+	width: 100%;
+    -webkit-box-shadow: -5px 0px 4px 0px rgba(0, 0, 0, 0.2);
+    moz-box-shadow: -5px 0px 4px 0px rgba(0, 0, 0, 0.2);
+    o-box-shadow: -5px 0px 4px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: -5px 0px 4px 0px rgba(0, 0, 0, 0.2);
+}
+#menu {
+    float:left;
+    width: 150px;
+}
+#menu li {
+    background-color:#444;
+    border-bottom: 1px solid #888;
+}
 
 /* Side Sliding Menu */
-
 
 #menu-trigger {
   display: none;
