@@ -2,11 +2,19 @@
 <html lang="en">
 <head>
     <title>LazyDJ</title>
+<<<<<<< HEAD
+    <!-- Loading external style sheets -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
+    <!-- Loading our own style sheet -->
+=======
 	<!-- Loading external style sheets -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
 	<!-- Loading our own style sheet -->
+>>>>>>> refs/remotes/origin/master
     <link rel="stylesheet" type="text/css" href="Canvas.css">
     <style type="text/css"></style>
 </head>
@@ -23,7 +31,11 @@
             </div>
             <!-- Populating the Nav bar with Nav links... but we don't need any right now just home link (brand) & search-->
             <div id="navbarCollapse" class="collapse navbar-collapse">
+<<<<<<< HEAD
+                <!-- search bar defined -->
+=======
 			    <!-- search bar defined -->
+>>>>>>> refs/remotes/origin/master
                 <form role="search" class="navbar-form navbar-right">
                     <div class="form-group">
                         <input type="text" placeholder="Search" class="form-control" id="search-box">
@@ -32,17 +44,48 @@
             </div>
         </nav>
     </div>
+<<<<<<< HEAD
+   <input id="menu-trigger" type="checkbox" />
+   <label for="menu-trigger">&#9836</label>
+
+   <header>
+        <ul class="menu">
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+        </ul>
+    </header>
+
+    <div id="content">
+
+    </div>
+
+
+
+    <!-- Our testing links for Soundcloud embed. TODO get rid of -->
+=======
 	<!-- Our testing links for Soundcloud embed. TODO get rid of -->
+>>>>>>> refs/remotes/origin/master
     <ul>
         <li class= "genre"><a href="#">dubstep</a></li>
         <li class= "genre"><a href="#">electronic</a></li>
         <li class= "genre"><a href="#">punk</a></li>
     </ul>
+<<<<<<< HEAD
+    <!-- div that we are injecting the iembed play returned from soundcloud -->
+    <div id="player"></div>
+    <!-- Boose's Face = canvas -->
+    <canvas id="MainCanvas"></canvas>
+    <!-- Loading up the js libraries we will be using in the following js code -->
+=======
 	<!-- div that we are injecting the iembed play returned from soundcloud -->
     <div id="player"></div>
 	<!-- Boose's Face = canvas -->
     <canvas id="MainCanvas"></canvas>
 	<!-- Loading up the js libraries we will be using in the following js code -->
+>>>>>>> refs/remotes/origin/master
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
     <script>
@@ -72,13 +115,19 @@
             context.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
         };
         imageObj.src = "Boose Boosington.jpg";
+<<<<<<< HEAD
+=======
 
+>>>>>>> refs/remotes/origin/master
         // initializing soundcloud
         SC.initialize({
             client_id: 'b11dd654670362e6d5b12263d9f51b78',
             redirect_uri: 'http://lazydj.net/callback.html'
         });
+<<<<<<< HEAD
+=======
 
+>>>>>>> refs/remotes/origin/master
         // initiate auth popup
         SC.connect().then(function () {
             return SC.get('/me');
@@ -102,7 +151,10 @@
                 });
             });
         }
+<<<<<<< HEAD
+=======
 
+>>>>>>> refs/remotes/origin/master
         // sort of a broken method for adding a onclick handler to our list
         var menuLinks = document.getElementsByClassName('genre');
         for (var i = 0; i < menuLinks.length; i++) {
@@ -115,8 +167,15 @@
                 playSomeSound("dubstep");
             };
         }
+<<<<<<< HEAD
+    </script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</body>
+</html>
+=======
 
     </script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </body>
 </html>
+>>>>>>> refs/remotes/origin/master
