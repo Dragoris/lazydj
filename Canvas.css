@@ -53,7 +53,10 @@ form {
                 color:#207cca;
 }
 /* search try */
-
+.ui-autocomplete-loading {
+    background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
+  }
+  #city { width: 25em; }
 /* Side Sliding Menu */
 
 #menu-trigger {

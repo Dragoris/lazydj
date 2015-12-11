@@ -6,11 +6,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+	
     <!-- Loading external js libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.full.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
     <!-- Loading our own style sheet -->
     <link rel="stylesheet" type="text/css" href="Canvas.css">
     <style type="text/css"></style>
@@ -56,11 +57,17 @@
 	</div>
 	<!-- end of matt's slide out code -->
 	
-	<!-- testing select2 -->
-    <div class="selectRow">
-        <!-- Using data-placeholder below to set place holder value. -->
-        <input type="hidden" id="remoteDataExample" name='input' />
-    </div>
+	<!-- testing search -->
+<div class="ui-widget">
+  <label for="city">Your city: </label>
+  <input id="city">
+  Powered by <a href="http://geonames.org">geonames.org</a>
+</div>
+ 
+<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+  Result:
+  <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+</div>
 	<!-- end of testingthing thingy -->
 	
     <!-- Our testing links for Soundcloud embed. TODO get rid of -->
@@ -147,87 +154,42 @@
                 play("dubstep");
             };
         }
-        //trying out this select2 thingy
-		$(".selectRow").select2({
-			placeholder: "Search Soundcloud...",
-			minimumInputLength: 3,
-			ajax: {
-				url: 'http://api.soundcloud.com/tracks/13158665?client_id=b11dd654670362e6d5b12263d9f51b78',
-				dataType: 'json',
-				data: function (params) {
-					return {
-						q: params.term, //search term
-						page: params.page
-					};
-				},
-				processResults: function (data, params) {
-					// Normally server side logic would parse your JSON string from your data returned above then 
-					// return results here that match your search term. In this case just returning 2 mock options.
-					params.page = params.page || 1;
-					return {
-						results: data.items,
-						pagination: {
-							more: (params.page * 30) < data.total_count
-						}
-					};
-				},
-				cache: true
-			},
-			escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-			templateResult: formatRepo, // omitted for brevity, see the source of this page
-			templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-		});
-		function formatRepo(repo) {
-			if (repo.loading) return repo.text;
-
-			var markup = "<div class='select2-result-repository clearfix'>" +
-			"<div class='select2-result-repository__avatar'><img src='" + repo.owner.avatar_url + "' /></div>" +
-			"<div class='select2-result-repository__meta'>" +
-			"<div class='select2-result-repository__title'>" + repo.full_name + "</div>";
-
-			if (repo.description) {
-			markup += "<div class='select2-result-repository__description'>" + repo.description + "</div>";
-			}
-
-			markup += "<div class='select2-result-repository__statistics'>" +
-			"<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> " + repo.forks_count + " Forks</div>" +
-			"<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> " + repo.stargazers_count + " Stars</div>" +
-			"<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> " + repo.watchers_count + " Watchers</div>" +
-			"</div>" +
-			"</div></div>";
-
-			return markup;
-		}
-		function formatRepoSelection(repo) {
-			return repo.full_name || repo.text;
-		}
-		/*
-		function getMockData() {
-		var mockData = [{
-			id: 1,
-			desc: 'Option 1'
-		}, {
-			id: 1,
-			desc: 'Option 2'
-		}],
-		var foundOptions = [];
-
-		for (var key in mockData) {
-			if (mockData[key].desc.toUpperCase().indexOf(searchTerm) >= 0) {
-				foundOptions.push(mockData[key]);
-			}
-		}
-
-		return foundOptions;
-		};
-		var searchTerm = remoteDataExample.value,
-		console.log("search value", searchTerm),
-		// Remote data example
-		var remoteDataConfig = {
+        //trying out this jquery, ajax, autocomplete thingy
+		$(function() {
+    function log( message ) {
+      $( "<div>" ).text( message ).prependTo( "#log" );
+      $( "#log" ).scrollTop( 0 );
+    }
+ 
+    $( "#city" ).autocomplete({
+      source: function( request, response ) {
+        $.ajax({
+          url: "http://gd.geobytes.com/AutoCompleteCity",
+          dataType: "jsonp",
+          data: {
+            q: request.term
+          },
+          success: function( data ) {
+            response( data );
+          }
+        });
+      },
+      minLength: 3,
+      select: function( event, ui ) {
+        log( ui.item ?
+          "Selected: " + ui.item.label :
+          "Nothing selected, input was " + this.value);
+      },
+      open: function() {
+        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+      },
+      close: function() {
+        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+      }
+    });
+  });
+// end of this thing for search
 		
-		},
-		*/
-        //end of the select2 thingy
     </script>
 </body>
 </html>
