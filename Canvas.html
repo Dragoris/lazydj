@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-	
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    
     <!-- Loading external js libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
@@ -32,44 +32,43 @@
                 <!-- search bar defined -->
                 <form role="search" class="navbar-form navbar-left">
                     <div class="form-group">
-                        <input type="text" placeholder="Search" class="form-control" id="search-box" oninput="search();">
+                        <input type="text" placeholder="Search" class="form-control" id="search-box">
                     </div>
                 </form>
             </div>
         </nav>
     </div>
-	<!-- Matts Slide out bar code -->
+    <!-- Matts Slide out bar code -->
     <input id="menu-trigger" type="checkbox" />
-	<label for="menu-trigger">9836</label>
+    <label for="menu-trigger">9836</label>
 
-	<header>
-		<ul class="menu">
-			<li><a href="#">link</a></li>
-			<li><a href="#">link</a></li>
-			<li><a href="#">link</a></li>
-			<li><a href="#">link</a></li>
-			<li><a href="#">link</a></li>
-		</ul>
-	</header>
+    <header>
+        <ul class="menu">
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+        </ul>
+    </header>
 
-	<div id="content">
+    <div id="content">
 
-	</div>
-	<!-- end of matt's slide out code -->
-	
-	<!-- testing search -->
+    </div>
+    <!-- end of matt's slide out code -->
+    
+    <!-- testing search -->
 <div class="ui-widget">
-  <label for="city">Your city: </label>
-  <input id="city">
-  Powered by <a href="http://geonames.org">geonames.org</a>
+  <label for="search">Your city: </label>
+  <input id="search" placeholder="Search">
 </div>
  
-<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+<div class="ui-widget" style="margin-top:2em; font-family:Arial;">
   Result:
   <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
 </div>
-	<!-- end of testingthing thingy -->
-	
+    <!-- end of testingthing thingy -->
+    
     <!-- Our testing links for Soundcloud embed. TODO get rid of -->
     <ul>
         <li class= "genre"><a href="#">dubstep</a></li>
@@ -78,7 +77,7 @@
     </ul>
     <!-- div that we are injecting the iembed play returned from soundcloud -->
     <div id="player"></div>
-	
+    
     <!-- Boose's Face = canvas -->
     <canvas id="MainCanvas"></canvas>
     <script>
@@ -88,8 +87,7 @@
         // grabbing the search box element
         var search_box = document.getElementById("search-box");
         // global for search results
-        var results = [];        
-        
+        var results = [];
         var context = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -108,24 +106,22 @@
         });
 
         // searches SC and returns an array with users and tracknames
-        function search() {
-            var query = search_box.value;
-			var i;
-            console.log('test ', query);
+        function search(query) {
+            var i;
             SC.get('/tracks', {q: query}).then(function (songs) {
                 for (i = 0; i < songs.length; i++) {
                     var song_obj = songs[i];
                     var user = song_obj.user.username;
                     var track = song_obj.title;
                     results.push(user + " - " + track);
-                };
-                console.log(results);
+                }
             }); // end of SC.get
+            return results;
         }; // end of search
-        
+
         // starts a streaming song with the given options
         function play(genre) {
-			var j;
+            var j;
             // getting an array of tracks that match the options
             SC.get('/tracks', {genre : genre}).then(function (response) {
                 console.log("genre", genre);
@@ -155,41 +151,34 @@
             };
         }
         //trying out this jquery, ajax, autocomplete thingy
-		$(function() {
-    function log( message ) {
-      $( "<div>" ).text( message ).prependTo( "#log" );
-      $( "#log" ).scrollTop( 0 );
-    }
- 
-    $( "#city" ).autocomplete({
-      source: function( request, response ) {
-        $.ajax({
-          url: "http://gd.geobytes.com/AutoCompleteCity",
-          dataType: "jsonp",
-          data: {
-            q: request.term
-          },
-          success: function( data ) {
-            response( data );
-          }
+        $("#search").autocomplete({
+            source: function (request, response) {
+                SC.get('/tracks', {q: request.term}).then(function (songs) {
+                    //clean out the results array
+                    results = [];
+                    var i;
+                    for (i = 0; i < songs.length; i++) {
+                        var song_obj = songs[i];
+                        var user = song_obj.user.username;
+                        var track = song_obj.title;
+                        results.push(user + " - " + track);
+                    }
+                    //console.log(results);
+                    response(results);
+                });
+            },
+            minLength: 3,
+            select: function (event, ui) {
+                
+            },
+            open: function () {
+                $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+            },
+            close: function() {
+                $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
+            }
         });
-      },
-      minLength: 3,
-      select: function( event, ui ) {
-        log( ui.item ?
-          "Selected: " + ui.item.label :
-          "Nothing selected, input was " + this.value);
-      },
-      open: function() {
-        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-      },
-      close: function() {
-        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-      }
-    });
-  });
-// end of this thing for search
-		
+        // end of this thing for search
     </script>
 </body>
 </html>
