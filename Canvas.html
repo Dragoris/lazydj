@@ -6,11 +6,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
-    <!-- Loading up the js libraries -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    
+    <!-- Loading external js libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
     <!-- Loading our own style sheet -->
     <link rel="stylesheet" type="text/css" href="Canvas.css">
     <style type="text/css"></style>
@@ -31,47 +32,37 @@
                 <!-- search bar defined -->
                 <form role="search" class="navbar-form navbar-left">
                     <div class="form-group">
-                        <input type="text" placeholder="Search" class="form-control" id="search-box" oninput="search()">
+                        <input type="text" placeholder="Search" class="form-control" id="search-box">
                     </div>
                 </form>
             </div>
         </nav>
     </div>
-	<!-- Matts Slide out bar code -->
+    <!-- Matt's Slide out bar code -->
     <input id="menu-trigger" type="checkbox" />
-	<label for="menu-trigger">&#9836</label>
+    <label for="menu-trigger">9836</label>
 
-	<header>
-		<ul class="menu">
-			<li><a href="#">link</a></li>
-			<li><a href="#">link</a></li>
-			<li><a href="#">link</a></li>
-			<li><a href="#">link</a></li>
-			<li><a href="#">link</a></li>
-		</ul>
-	</header>
+    <header>
+        <ul class="menu">
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+            <li><a href="#">link</a></li>
+        </ul>
+    </header>
 
-	<div id="content">
+    <div id="content">
 
-	</div>
-	<!-- end of matt's slide out code -->
-    <!-- Our testing links for Soundcloud embed. TODO get rid of -->
-    <ul>
-        <li class= "genre"><a href="#">dubstep</a></li>
-        <li class= "genre"><a href="#">electronic</a></li>
-        <li class= "genre"><a href="#">punk</a></li>
-    </ul>
-    <!-- div that we are injecting the iembed play returned from soundcloud -->
-    <div id="player"></div>
-	<!-- testing thingy -->
-	<p>
-    <select class="js-example-data-ajax form-control">
-      <option value="3620194" selected="selected">select2/select2</option>
-    </select>
-    </p>
-	<pre data-fill-from=".js-code-data-ajax-html"></pre>
-	<pre data-fill-from=".js-code-data-ajax"></pre>
-	<!-- end of testingthing thingy -->
+    </div>
+    <!-- end of matt's slide out code -->
+    
+    <!-- testing search -->
+    <div class="ui-widget">
+      <label for="search">Your song: </label>
+      <input id="search" placeholder="Search">
+    </div>
+    <!-- end of testingthing thingy -->
     <!-- Boose's Face = canvas -->
     <canvas id="MainCanvas"></canvas>
     <script>
@@ -82,10 +73,6 @@
         var search_box = document.getElementById("search-box");
         // global for search results
         var results = [];
-        // load up select2 thingy
-        //$('search-box').select2();
-        
-        
         var context = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -103,110 +90,55 @@
             client_id: 'b11dd654670362e6d5b12263d9f51b78'
         });
 
-        // searches SC and returns an array with artists and songs
-        function search() {
-            var query = search_box.value;
-            console.log('test ', query);
-            SC.get('/tracks', {q: query}).then(function(songs) {
-                for (var i = 0; i < songs.length; i++) {
-                    var song_obj = songs[i];
-                    var user = song_obj.user.username;
-                    var track = song_obj.title;
-                    results.push(user + " - " + track);
-                };
-                console.log(results);
-            }); // end of SC.get
-        }; // end of search
-        
-        // starts a streaming song with the given options
-        function play(genre) {
-            // getting an array of tracks that match the options
-            SC.get('/tracks', {genre : genre}).then(function (response) {
-                console.log("genre", genre);
-                // creating a random number between 0 - 49 to pick a random track
-                var random = Math.floor(Math.random() * 49);
-                console.log("this is the response", response);
-                console.log("random", random);
-                console.log(response[random]);
-                // using the soundcloud embed get the iframe player
-                SC.oEmbed(response[random].uri, {element: player}).then(function (embed) {
-                    console.log("embed", embed);
-                    // injecting the iframe html returned into our div element
-                    player.value = embed.html;
-                });
-            });
-        }
-
         // sort of a broken method for adding a onclick handler to our list
         var menuLinks = document.getElementsByClassName('genre');
-        for (var i = 0; i < menuLinks.length; i++) {
-            var menuLink = menuLinks[i];
-            menuLink.onclick = function(e) {
+        for (j = 0; j < menuLinks.length; j++) {
+            var menuLink = menuLinks[j];
+            menuLink.onclick = function (e) {
                 //console.log (menuLink.innerHTML);
                 e.preventDefault();
                 // calls the play function to play a track
                 play("dubstep");
             };
         }
-        //trying out this select2 thingy
-        $("js-example-data-ajax").select2({
-        ajax: {
-        url: "https://api.github.com/search/repositories",
-        dataType: 'json',
-        delay: 250,
-        data: function (params) {
-          return {
-            q: params.term, // search term
-            page: params.page
-          };
-        },
-        processResults: function (data, params) {
-          // parse the results into the format expected by Select2
-          // since we are using custom formatting functions we do not need to
-          // alter the remote JSON data, except to indicate that infinite
-          // scrolling can be used
-          params.page = params.page || 1;
-
-          return {
-            results: data.items,
-            pagination: {
-              more: (params.page * 30) < data.total_count
+        //trying out this jquery, ajax, autocomplete thingy
+        $("#search").autocomplete({
+            source: function (request, response) {
+                SC.get('/tracks', {q: request.term}).then(function (songs) {
+                    //clean out the results array
+                    results = [];
+                    var i;
+                    console.log(songs);
+                    for (i = 0; i < songs.length; i++) {
+                        var song_obj = songs[i];
+                        //var user = song_obj.user.username;
+                        var track = song_obj.title;
+                        var track_id = song_obj.id;
+                        results.push({
+                        label: track,
+                        value: track_id
+                        });
+                    }
+                    response(results);
+                });
+            },
+            minLength: 3,
+            select: function (event, ui) {
+                console.log(ui.item.label);
+                SC.stream("/tracks/"+ ui.item.value).then(function(player){
+                    console.log(player);
+                    player.play();
+                });
+                return false;
+            },
+            open: function () {
+                $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+            },
+            close: function() {
+                $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
             }
-          };
-        },
-        cache: true
-        },
-        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-        minimumInputLength: 1,
-        templateResult: formatRepo, // omitted for brevity, see the source of this page
-        templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
         });
-		function formatRepo (repo) {
-		if (repo.loading) return repo.text;
-
-		var markup = "<div class='select2-result-repository clearfix'>" +
-		"<div class='select2-result-repository__avatar'><img src='" + repo.owner.avatar_url + "' /></div>" +
-		"<div class='select2-result-repository__meta'>" +
-		  "<div class='select2-result-repository__title'>" + repo.full_name + "</div>";
-
-		if (repo.description) {
-		markup += "<div class='select2-result-repository__description'>" + repo.description + "</div>";
-		}
-
-		markup += "<div class='select2-result-repository__statistics'>" +
-		"<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> " + repo.forks_count + " Forks</div>" +
-		"<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> " + repo.stargazers_count + " Stars</div>" +
-		"<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> " + repo.watchers_count + " Watchers</div>" +
-		"</div>" +
-		"</div></div>";
-
-		return markup;
-		}
-
-		function formatRepoSelection (repo) {
-		return repo.full_name || repo.text;
-		}
-        //end of the select2 thingy
+        // end of this thing for search
     </script>
 </body>
 </html>
