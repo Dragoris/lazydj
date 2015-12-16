@@ -38,7 +38,7 @@
             </div>
         </nav>
     </div>
-    <!-- Matts Slide out bar code -->
+    <!-- Matt's Slide out bar code -->
     <input id="menu-trigger" type="checkbox" />
     <label for="menu-trigger">9836</label>
 
@@ -58,26 +58,11 @@
     <!-- end of matt's slide out code -->
     
     <!-- testing search -->
-<div class="ui-widget">
-  <label for="search">Your city: </label>
-  <input id="search" placeholder="Search">
-</div>
- 
-<div class="ui-widget" style="margin-top:2em; font-family:Arial;">
-  Result:
-  <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
-</div>
+    <div class="ui-widget">
+      <label for="search">Your song: </label>
+      <input id="search" placeholder="Search">
+    </div>
     <!-- end of testingthing thingy -->
-    
-    <!-- Our testing links for Soundcloud embed. TODO get rid of -->
-    <ul>
-        <li class= "genre"><a href="#">dubstep</a></li>
-        <li class= "genre"><a href="#">electronic</a></li>
-        <li class= "genre"><a href="#">punk</a></li>
-    </ul>
-    <!-- div that we are injecting the iembed play returned from soundcloud -->
-    <div id="player"></div>
-    
     <!-- Boose's Face = canvas -->
     <canvas id="MainCanvas"></canvas>
     <script>
@@ -105,40 +90,6 @@
             client_id: 'b11dd654670362e6d5b12263d9f51b78'
         });
 
-        // searches SC and returns an array with users and tracknames
-        function search(query) {
-            var i;
-            SC.get('/tracks', {q: query}).then(function (songs) {
-                for (i = 0; i < songs.length; i++) {
-                    var song_obj = songs[i];
-                    var user = song_obj.user.username;
-                    var track = song_obj.title;
-                    results.push(user + " - " + track);
-                }
-            }); // end of SC.get
-            return results;
-        }; // end of search
-
-        // starts a streaming song with the given options
-        function play(genre) {
-            var j;
-            // getting an array of tracks that match the options
-            SC.get('/tracks', {genre : genre}).then(function (response) {
-                console.log("genre", genre);
-                // creating a random number between 0 - 49 to pick a random track
-                var random = Math.floor(Math.random() * 49);
-                console.log("this is the response", response);
-                console.log("random", random);
-                console.log(response[random]);
-                // using the soundcloud embed get the iframe player
-                SC.oEmbed(response[random].uri, {element: player}).then(function (embed) {
-                    console.log("embed", embed);
-                    // injecting the iframe html returned into our div element
-                    player.value = embed.html;
-                });
-            });
-        }
-
         // sort of a broken method for adding a onclick handler to our list
         var menuLinks = document.getElementsByClassName('genre');
         for (j = 0; j < menuLinks.length; j++) {
@@ -157,19 +108,28 @@
                     //clean out the results array
                     results = [];
                     var i;
+                    console.log(songs);
                     for (i = 0; i < songs.length; i++) {
                         var song_obj = songs[i];
-                        var user = song_obj.user.username;
+                        //var user = song_obj.user.username;
                         var track = song_obj.title;
-                        results.push(user + " - " + track);
+                        var track_id = song_obj.id;
+                        results.push({
+                        label: track,
+                        value: track_id
+                        });
                     }
-                    //console.log(results);
                     response(results);
                 });
             },
             minLength: 3,
             select: function (event, ui) {
-                
+                console.log(ui.item.label);
+                SC.stream("/tracks/"+ ui.item.value).then(function(player){
+                    console.log(player);
+                    player.play();
+                });
+                return false;
             },
             open: function () {
                 $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
