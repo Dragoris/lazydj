@@ -41,38 +41,25 @@
     <!-- Matt's Slide out bar code -->
     <input id="menu-trigger" type="checkbox" />
     <label for="menu-trigger">9836</label>
-
+    <!-- playlist holder -->
     <header>
-        <ul class="menu">
-            <li><a href="#">link</a></li>
-            <li><a href="#">link</a></li>
-            <li><a href="#">link</a></li>
-            <li><a href="#">link</a></li>
-            <li><a href="#">link</a></li>
+        <ul class="playlist">
         </ul>
     </header>
 
     <div id="content">
-
     </div>
     <!-- end of matt's slide out code -->
-    
-    <!-- testing search -->
+    <!-- autocomplete search -->
     <div class="ui-widget">
       <label for="search">Your song: </label>
-      <input id="search" placeholder="Search">
+      <input id="search" placeholder="Search music">
     </div>
-    <!-- end of testingthing thingy -->
+    <!-- end of autocomplete search -->
     <!-- Boose's Face = canvas -->
     <canvas id="MainCanvas"></canvas>
     <script>
         var canvas = document.getElementById("MainCanvas");
-        // grabbing the div to inject the iframe soundcloud player
-        var player = document.getElementById("player");
-        // grabbing the search box element
-        var search_box = document.getElementById("search-box");
-        // global for search results
-        var results = [];
         var context = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -85,51 +72,54 @@
         };
         imageObj.src = "Boose Boosington.jpg";
 
+        // globals for tracks and playlists.
+        var tracks, playlist = [];
         // initializing soundcloud (SC object)
         SC.initialize({
             client_id: 'b11dd654670362e6d5b12263d9f51b78'
         });
 
-        // sort of a broken method for adding a onclick handler to our list
-        var menuLinks = document.getElementsByClassName('genre');
-        for (j = 0; j < menuLinks.length; j++) {
-            var menuLink = menuLinks[j];
-            menuLink.onclick = function (e) {
-                //console.log (menuLink.innerHTML);
-                e.preventDefault();
-                // calls the play function to play a track
-                play("dubstep");
-            };
-        }
-        //trying out this jquery, ajax, autocomplete thingy
+        // autocomplete thingy
         $("#search").autocomplete({
             source: function (request, response) {
                 SC.get('/tracks', {q: request.term}).then(function (songs) {
-                    //clean out the results array
-                    results = [];
-                    var i;
+                    //clean out the display_results array. to be shown to the user by autocomplete.
+                    var display_results = [];
                     console.log(songs);
-                    for (i = 0; i < songs.length; i++) {
+                    for (var i = 0; i < songs.length; i++) {
                         var song_obj = songs[i];
-                        //var user = song_obj.user.username;
-                        var track = song_obj.title;
-                        var track_id = song_obj.id;
-                        results.push({
-                        label: track,
-                        value: track_id
-                        });
-                    }
-                    response(results);
+                        var id = i.toString() + " ";
+                        if(song_obj.streamable) {
+                            display_results.push({
+                                label: song_obj.title,
+                                value: id + song_obj.id 
+                            });
+                        }
+                        else {
+                            songs.splice(i,1);
+                        }
+                    } // end of for loop
+                    tracks = songs;
+                    console.log("track", tracks);
+                    response(display_results);
+                }).catch(function() {
+                    console.log("failed search", arguments);
                 });
             },
-            minLength: 3,
+            maxResults: 10,
+            minLength: 3, //min input length needed to fire source anon func
+            // select is run when user selects a link
             select: function (event, ui) {
-                console.log(ui.item.label);
-                SC.stream("/tracks/"+ ui.item.value).then(function(player){
-                    console.log(player);
+                    var split = ui.item.value.split(" ");
+                    console.log(split[0], split[1]);
+                    SC.stream("/tracks/"+ split[1]).then(function(player){
                     player.play();
+                    // inject html
+                    $(".playlist").append('<div class=thumbnail><img src='+tracks[split[0]].artwork_url+'><li><a href="#">'+tracks[split[0]].title+'</a></li></div>');
+                }).catch(function() {
+                    console.log("failed streaming", arguments);
                 });
-                return false;
+                return false; // so we won't have the value put in the search box after selected
             },
             open: function () {
                 $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
@@ -138,7 +128,7 @@
                 $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
             }
         });
-        // end of this thing for search
+        // end of autocomplete
     </script>
 </body>
 </html>
