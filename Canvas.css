@@ -1,16 +1,22 @@
 html, body{
 height: 100%;
 width: 100%;
-background-color: white;
+margin: 0;
+padding: 0;
+
 }
 
 canvas{
-	border: 5pt solid black;
 	position: relative;
 	height: auto;
 	width: 100%;
 	box-sizing: border-box;
     display:block;
+    context.mozImageSmoothingEnabled = false;
+    context.webkitImageSmoothingEnabled = false;
+context.msImageSmoothingEnabled = false;
+context.imageSmoothingEnabled = false;
+
 
 }
 
@@ -24,7 +30,9 @@ canvas{
   display: none;
 }
 #menu-trigger + label {
-    background-color: #333;
+    background-color: #fff;
+    filter: alpha(opacity=30); /* For IE8 and earlier */
+    opacity: 0.3;
     color: #FFF;
     cursor: pointer;
     padding: 20px 10px;
@@ -34,8 +42,8 @@ canvas{
     left: 0;
     z-index: 1; // since the trigger comes first in our markup
     border-radius: 8px;
-    -webkit-transition: -webkit-transform .3s ease;
-    transition: transform .3s ease;
+    -webkit-transition: -webkit-transform .9s ease;
+    transition: transform .9s ease;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
@@ -43,7 +51,9 @@ canvas{
     user-select: none; // future proofing
 }
 header {
-    background-color: #333;
+    background-color: #fff;
+    filter: alpha(opacity=30); /* For IE8 and earlier */
+    opacity: 0.3;
     height: 100%;
     width: 250px;
     overflow: auto;
@@ -54,28 +64,30 @@ header {
     -webkit-transform: translateX(-250px);
     -ms-transform: translateX(-250px);
     transform: translateX(-250px);
-    -webkit-transition: -webkit-transform .3s ease;
-    transition: transform .3s ease;
+    -webkit-transition: -webkit-transform .9s ease;
+    transition: transform .9s ease;
 }
 
-ul.menu > li > a {
-    color: #AAA;
+ul.playlist > li > a {
+    color: #fff;
+    filter: alpha(opacity=80); /* For IE8 and earlier */
+    opacity: 0.8;
     text-decoration: none;
     padding: 10px 30px;
     display: block;
 }
 
-ul.menu > li > a:hover {
-    background-color: #222;
-    color: #FFF;
+ul.playlist > li > a:hover {
+    background-color: red;
+    color: yellow;
 }
 body {
     overflow-x: hidden; // prevent a horizontal scrollbar from pushing the content right
 }
 
 #content {
-    -webkit-transition: -webkit-transform .3s ease;
-    transition: transform .3s ease;
+    -webkit-transition: -webkit-transform .9s ease;
+    transition: transform .9s ease;
 }
 #menu-trigger:checked + label {
     -webkit-transform: translateX(250px);
@@ -121,4 +133,26 @@ body {
   -ms-transition: all .55s ease;
   -o-transition: all .55s ease;
   transition: all .55s ease;
+}
+.playlist {
+    padding: 0;
+}
+.thumbnail {
+    display: inline-block;
+    float: left;
+    width: 60px;
+    padding-right: 5px;
+}
+.track-playlist {
+    list-style-type: none;
+    padding: 0;
+}
+.queued-song {
+    display: inline-block;
+    padding-right: 5px;
+    font-family: arial;
+    margin: 10px 0 10px 0;
+    height: 60;
+    width: 250;
+    background-color: white;
 }
