@@ -3,9 +3,7 @@
 <head>
     <title>LazyDJ</title>
     <!-- Loading external style sheets -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
+   
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     
     <!-- Loading external js libraries -->
@@ -17,27 +15,7 @@
     <style type="text/css"></style>
 </head>
 <body>
-    <!-- div to hold the nav and search bar -->
-    <div class="container">
-        <nav role="navigation" class="navbar navbar-inverse">
-            <!-- Brand and toggle get grouped for better mobile display, kinda broken -->
-            <div class="navbar-header">
-                <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
-                    <span class="sr-only">Toggle navigation</span>
-                </button>
-                <a href="#" class="navbar-brand">LazyDJ</a>
-            </div>
-            <!-- Populating the Nav bar with Nav links... but we don't need any right now just home link (brand) & search -->
-            <div id="navbarCollapse" class="collapse navbar-collapse">
-                <!-- search bar defined -->
-                <form role="search" class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" placeholder="Search" class="form-control" id="search-box">
-                    </div>
-                </form>
-            </div>
-        </nav>
-    </div>
+    
     <!-- Matt's Slide out bar code -->
     <input id="menu-trigger" type="checkbox" />
     <label for="menu-trigger">9836</label>
@@ -51,10 +29,11 @@
     </div>
     <!-- end of matt's slide out code -->
     <!-- autocomplete search -->
-    <div class="ui-widget">
-      <label for="search">Your song: </label>
-      <input id="search" placeholder="Search music">
-    </div>
+    <div class ="container-1">
+     <!-- testing search -->
+        <div class="ui-widget">
+          <input id="search" placeholder="Search Music">
+        </div>
     <!-- end of autocomplete search -->
     <!-- Boose's Face = canvas -->
     <canvas id="MainCanvas"></canvas>
