@@ -22,11 +22,12 @@
     <!-- playlist holder -->
     <header>
         <ul class="playlist">
+        <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="thumbnail" src=code-->
+
         </ul>
     </header>
 
-    <div id="content">
-    </div>
+ 
     <!-- end of matt's slide out code -->
     <!-- autocomplete search -->
     <div class ="container-1">
@@ -34,6 +35,7 @@
         <div class="ui-widget">
           <input id="search" placeholder="Search Music">
         </div>
+    </div>    
     <!-- end of autocomplete search -->
     <!-- Boose's Face = canvas -->
     <canvas id="MainCanvas"></canvas>
@@ -94,7 +96,7 @@
                     SC.stream("/tracks/"+ split[1]).then(function(player){
                     player.play();
                     // inject html
-                    $(".playlist").append('<div class=thumbnail><img src='+tracks[split[0]].artwork_url+'><li><a href="#">'+tracks[split[0]].title+'</a></li></div>');
+                    $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[split[0]].artwork_url+'>'+tracks[split[0]].title+'</li></div>');
                 }).catch(function() {
                     console.log("failed streaming", arguments);
                 });
@@ -106,6 +108,7 @@
             close: function() {
                 $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
             }
+
         });
         // end of autocomplete
     </script>
