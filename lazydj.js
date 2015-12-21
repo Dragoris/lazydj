@@ -13,6 +13,9 @@ imageObj.src = "images/Boose Boosington.jpg";
 
 // globals for tracks and playlists.
 var tracks, playlist = [];
+// play/pause button logic
+var current_player;
+
 // initializing soundcloud (SC object)
 SC.initialize({
     client_id: 'b11dd654670362e6d5b12263d9f51b78'
@@ -49,12 +52,22 @@ $("#search").autocomplete({
     minLength: 3, //min input length needed to fire source anon func
     // select is run when user selects a link
     select: function (event, ui) {
-            var split = ui.item.value.split(" ");
-            console.log(split[0], split[1]);
-            SC.stream("/tracks/"+ split[1]).then(function(player){
-            player.play();
-            // inject html
-            $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[split[0]].artwork_url+'>'+tracks[split[0]].title+'</li></div>');
+        
+        var split = ui.item.value.split(" ");
+        var streamplayer = streamsc(split[1]);
+        console.log(streamplayer);
+        streamplayer.play();
+        $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[split[0]].artwork_url+'>'+tracks[split[0]].title+'</li></div>');
+        SC.stream("/tracks/"+ split[1]).then(function(player){
+        if (current_player) {
+            current_player.pause();
+        }
+        current_player = player;
+        console.log(current_player,"current");
+        console.log(player);
+        player.play();
+        // inject html - will always do when a song is selected
+        $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[split[0]].artwork_url+'>'+tracks[split[0]].title+'</li></div>');
         }).catch(function() {
             console.log("failed streaming", arguments);
         });

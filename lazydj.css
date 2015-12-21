@@ -11,13 +11,12 @@ canvas{
 	height: auto;
 	width: 100%;
 	box-sizing: border-box;
-    display:block;
+    display: block;
+    z-index: -1;
     context.mozImageSmoothingEnabled = false;
     context.webkitImageSmoothingEnabled = false;
     context.msImageSmoothingEnabled = false;
     context.imageSmoothingEnabled = false;
-
-
 }
 
 /* search try */
@@ -155,4 +154,11 @@ body {
     height: 60;
     width: 250;
     background-color: white;
+}
+/* player css */
+#play {
+    background: url(images/play-button.png);
+    height:166px;
+    width: 166px;
+    z-index: 1;
 }
