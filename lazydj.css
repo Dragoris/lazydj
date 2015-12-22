@@ -23,18 +23,16 @@ canvas{
 #menu-trigger {
   display: none;
 }
-#menu-trigger + label { */
+#menu-trigger + label {
     background-color: #fff;
     background: rgba(0, 0, 0, 0.4);
-    color: black;
+    color: white;
     cursor: pointer;
     padding: 20px 10px;
-    margin: 20em auto;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1; // since the trigger comes first in our markup
-    border-radius: 8px;
+    z-index: 1; 
     -webkit-transition: -webkit-transform .9s ease;
     transition: transform .9s ease;
     -webkit-user-select: none; /* users can't scroll select the icon */
@@ -61,22 +59,8 @@ header {
     transition: transform .9s ease;
 }
 
-ul.playlist > li > a {
-    color: #fff;
-    filter: alpha(opacity=80); /* For IE8 and earlier */
-    opacity: 0.8;
-    text-decoration: none;
-    padding: 10px 30px;
-    display: block;
-}
-
 body {
-    overflow-x: hidden; // prevent a horizontal scrollbar from pushing the content right
-}
-
-#content {
-    -webkit-transition: -webkit-transform .9s ease;
-    transition: transform .9s ease;
+    overflow-x: hidden; /* prevent a horizontal scrollbar from pushing the content right*/
 }
 #menu-trigger:checked + label {
     -webkit-transform: translateX(250px);
@@ -88,12 +72,6 @@ body {
     -webkit-transform: translateX(0px);
     -ms-transform: translateX(0px);
     transform: translateX(0px);
-}
-
-#menu-trigger:checked ~ #content {
-    -webkit-transform: translateX(250px);
-    -ms-transform: translateX(250px);
-    transform: translateX(250px);
 }
 /* End of Side Sliding Menu */
 
@@ -219,6 +197,7 @@ body {
 
 .playlist { /* containing li's of selected songs*/
     padding: 0;
+    margin: 0;
     overflow-x: hidden;
 }
 
@@ -232,25 +211,27 @@ body {
     list-style-type: none;
     color: white;
     padding: 0;
+
 }
+
 .track-playlist:hover{
     color: black;
 }
 .queued-song { 
     display: inline-block;
-    padding-right: 5px;
     font-family: arial;
     margin: 10px 0 10px 0;
     width: 100%;
     filter: alpha(opacity=80); /* For IE8 and earlier */
     opacity: 0.8;
-
-    -webkit-transition: background .5s ease-out;
+    -webkit-transition: background .5s ease-out; /* transition back after hover*/
     -moz-transition: background .5s ease-out;
     -ms-transition: background .5s ease-out;
     -o-transition: background .5s ease-out;
-    transition: background .5s ease-out;
+        transition: background .5s ease-out;
 }
+
+
 .queued-song:hover {
     background-color: white;
     color: black;
