@@ -199,7 +199,14 @@ body {
     padding: 0;
     margin: 0;
     overflow-x: hidden;
+
+
 }
+/* loading li's sliding into place*/
+@-webkit-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
+@-moz-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
+@-o-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
+    @keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
 
 .thumbnail { /* album art */
     display: inline-block;
@@ -217,6 +224,12 @@ body {
 .track-playlist:hover{
     color: black;
 }
+/* loading li's sliding into place*/
+@-webkit-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
+@-moz-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
+@-o-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
+    @keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
+
 .queued-song { 
     display: inline-block;
     font-family: arial;
@@ -229,8 +242,13 @@ body {
     -ms-transition: background .5s ease-out;
     -o-transition: background .5s ease-out;
         transition: background .5s ease-out;
+    /* loading li's sliding into place*/
+    -webkit-animation: playlist-animation 1s ease forwards ;
+    -moz-animation: playlist-animation 1s ease forwards;
+    -o-animation: playlist-animation 1s ease forwards;
+        animation: playlist-animation 1s ease forwards;
+    
 }
-
 
 .queued-song:hover {
     background-color: white;
