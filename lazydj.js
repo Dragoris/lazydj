@@ -15,15 +15,15 @@ imageObj.src = "images/Boose Boosington.jpg";
 var tracks, playlist = [];
 
 // play/pause button logic
-var currentPlayer;
+var currentPlayer, isPlaying;
+var nextIndex = 0;
 var streamTrack = function(track){
     console.log("track", track);
     return SC.stream('/tracks/' + track.id).then(function(player){
-      if (currentPlayer) {
-        currentPlayer.pause();
-      }
       currentPlayer = player;
       player.play();
+      isPlaying = 1;
+      nextIndex ++;
     }).catch(function(){
       console.log(arguments);
     }); //end of return
@@ -74,7 +74,11 @@ $("#search").autocomplete({
         var songIndex = split[0];
         var sondID = split[1];
         var songUri = split[2];
-        SC.resolve(songUri).then(streamTrack);
+        // add selected song to playlist array
+        playlist.push(songUri);
+        if (nextIndex == 0) {
+            SC.resolve(songUri).then(streamTrack);
+        }
         $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[songIndex].artwork_url+'>'+tracks[songIndex].title+'</li></div>');
         /*
         SC.stream("/tracks/"+ songId).then(function(player){
@@ -97,9 +101,28 @@ $("#search").autocomplete({
 });
 // end of autocomplete
 
+// play and pause button on cli
 document.getElementById('play').addEventListener('click', function(){
-        if (currentPlayer) {
+        if (currentPlayer && isPlaying == 1) {
             console.log("YAYYAYAYA", currentPlayer);
             currentPlayer.pause();
+            isPlaying = 0;
+        }
+        else if (currentPlayer && isPlaying == 0) {
+            currentPlayer.play();
+            isPlaying = 1;
+        }
+      });
+      
+document.getElementById('next').addEventListener('click', function(){
+        console.log("nextIndex", nextIndex);
+        console.log("playlist.length", playlist.length);
+        console.log(playlist);
+        if (nextIndex <= playlist.length) {
+            console.log(playlist[nextIndex]);
+            SC.resolve(playlist[nextIndex]).then(streamTrack);
+        }
+        else {
+            console.log("No songs next in playlist");
         }
       });
