@@ -14,16 +14,14 @@ imageObj.src = "images/Boose Boosington.jpg";
 // globals for tracks and playlists.
 var tracks, playlist = [];
 
-// play/pause button logic
-var currentPlayer, isPlaying;
-var nextIndex = 0;
+// stream track plus some globals to help out
+var currentPlayer, isPlaying, currentIndex;
 var streamTrack = function(track){
-    console.log("track", track);
     return SC.stream('/tracks/' + track.id).then(function(player){
       currentPlayer = player;
       player.play();
       isPlaying = 1;
-      nextIndex ++;
+      console.log("streamTrack");
     }).catch(function(){
       console.log(arguments);
     }); //end of return
@@ -76,19 +74,12 @@ $("#search").autocomplete({
         var songUri = split[2];
         // add selected song to playlist array
         playlist.push(songUri);
-        if (nextIndex == 0) {
+        // play the first song only
+        if (playlist.length == 1) {
             SC.resolve(songUri).then(streamTrack);
+            currentIndex = 0;
         }
         $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[songIndex].artwork_url+'>'+tracks[songIndex].title+'</li></div>');
-        /*
-        SC.stream("/tracks/"+ songId).then(function(player){
-            player.play();
-            // inject html - will always do when a song is selected
-            $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[songIndex].artwork_url+'>'+tracks[songIndex].title+'</li></div>');
-        }).catch(function() {
-            console.log("failed streaming", arguments);
-        });
-        */
         return false; // so we won't have the value put in the search box after selected
     },
     open: function () {
@@ -101,10 +92,10 @@ $("#search").autocomplete({
 });
 // end of autocomplete
 
-// play and pause button on cli
+// play and pause button
 document.getElementById('play').addEventListener('click', function(){
         if (currentPlayer && isPlaying == 1) {
-            console.log("YAYYAYAYA", currentPlayer);
+            console.log("paused clicked");
             currentPlayer.pause();
             isPlaying = 0;
         }
@@ -113,16 +104,31 @@ document.getElementById('play').addEventListener('click', function(){
             isPlaying = 1;
         }
       });
-      
+
+// next button
 document.getElementById('next').addEventListener('click', function(){
-        console.log("nextIndex", nextIndex);
+        console.log("currentIndex", currentIndex);
         console.log("playlist.length", playlist.length);
-        console.log(playlist);
-        if (nextIndex <= playlist.length) {
-            console.log(playlist[nextIndex]);
-            SC.resolve(playlist[nextIndex]).then(streamTrack);
+        if (currentIndex < playlist.length) {
+            currentIndex ++;
+            console.log(playlist[currentIndex]);
+            SC.resolve(playlist[currentIndex]).then(streamTrack);
+            
         }
         else {
             console.log("No songs next in playlist");
+        }
+      });
+      
+// previous button
+document.getElementById('previous').addEventListener('click', function(){
+        if (playlist.length >= 2 && currentIndex < playlist.length) {
+            console.log("currentIndex prev", currentIndex);
+            console.log("playlist.length prev", playlist.length);
+            currentIndex --;
+            SC.resolve(playlist[currentIndex]).then(streamTrack);
+        }
+        else {
+            console.log("Something went wrong...");
         }
       });
