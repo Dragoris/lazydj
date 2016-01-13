@@ -19,9 +19,15 @@ var currentPlayer, isPlaying, currentIndex;
 var streamTrack = function(track){
     return SC.stream('/tracks/' + track.id).then(function(player){
       currentPlayer = player;
+      player.seek(0);
       player.play();
       isPlaying = 1;
       console.log("streamTrack");
+      // add an event listener to the SC player to play the next song
+      currentPlayer.on('finish', function() {
+        console.log("the song has finished");
+        document.getElementById('next').click();
+    });
     }).catch(function(){
       console.log(arguments);
     }); //end of return
@@ -94,41 +100,41 @@ $("#search").autocomplete({
 
 // play and pause button
 document.getElementById('play').addEventListener('click', function(){
-        if (currentPlayer && isPlaying == 1) {
-            console.log("paused clicked");
-            currentPlayer.pause();
-            isPlaying = 0;
-        }
-        else if (currentPlayer && isPlaying == 0) {
-            currentPlayer.play();
-            isPlaying = 1;
-        }
-      });
+    if (currentPlayer && isPlaying == 1) {
+        console.log("paused clicked");
+        currentPlayer.pause();
+        isPlaying = 0;
+    }
+    else if (currentPlayer && isPlaying == 0) {
+        currentPlayer.play();
+        isPlaying = 1;
+    }
+});
 
 // next button
 document.getElementById('next').addEventListener('click', function(){
-        console.log("currentIndex", currentIndex);
-        console.log("playlist.length", playlist.length);
-        if (currentIndex < playlist.length) {
-            currentIndex ++;
-            console.log(playlist[currentIndex]);
-            SC.resolve(playlist[currentIndex]).then(streamTrack);
-            
-        }
-        else {
-            console.log("No songs next in playlist");
-        }
-      });
+    console.log("currentIndex", currentIndex);
+    console.log("playlist.length", playlist.length);
+    if (currentIndex < playlist.length) {
+        currentIndex ++;
+        console.log(playlist[currentIndex]);
+        SC.resolve(playlist[currentIndex]).then(streamTrack);
+        
+    }
+    else {
+        console.log("No songs next in playlist");
+    }
+});
       
 // previous button
 document.getElementById('previous').addEventListener('click', function(){
-        if (playlist.length >= 2 && currentIndex < playlist.length) {
-            console.log("currentIndex prev", currentIndex);
-            console.log("playlist.length prev", playlist.length);
-            currentIndex --;
-            SC.resolve(playlist[currentIndex]).then(streamTrack);
-        }
-        else {
-            console.log("Something went wrong...");
-        }
-      });
+    if (playlist.length >= 2 && currentIndex < playlist.length) {
+        console.log("currentIndex prev", currentIndex);
+        console.log("playlist.length prev", playlist.length);
+        currentIndex --;
+        SC.resolve(playlist[currentIndex]).then(streamTrack);
+    }
+    else {
+        console.log("Something went wrong...");
+    }
+});
