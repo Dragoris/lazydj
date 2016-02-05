@@ -27,6 +27,7 @@ $.ajax({
 })
 // some globals to help out
 var currentPlayer, isPlaying, currentIndex, playlist = [];
+var tracks = [];
 // stream track variable and function - starts a stream for a song
 var streamTrack = function(track){
     return SC.stream('/tracks/' + track.id).then(function(player){
@@ -62,6 +63,7 @@ $("#search").autocomplete({
                 }
             } // end of for loop
             response(display_results);
+            tracks = songs;
         }).catch(function() {
             console.log("failed search", arguments);
         });
