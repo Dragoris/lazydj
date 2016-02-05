@@ -11,16 +11,13 @@ canvas{
 	height: auto;
 	width: 100%;
 	box-sizing: border-box;
-<<<<<<< HEAD
+
     display: block;
     z-index: -1;
     context.mozImageSmoothingEnabled = false;
     context.webkitImageSmoothingEnabled = false;
     context.msImageSmoothingEnabled = false;
     context.imageSmoothingEnabled = false;
-=======
-    display:block;
->>>>>>> refs/remotes/origin/master
 }
 
 /* search try */
@@ -215,7 +212,7 @@ body {
 @-webkit-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
 @-moz-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
 @-o-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
-    @keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
+@keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
 
 .thumbnail { /* album art */
     display: inline-block;
@@ -237,7 +234,7 @@ body {
 @-webkit-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
 @-moz-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
 @-o-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
-    @keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
+@keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
 
 .queued-song { 
     display: inline-block;
@@ -261,7 +258,6 @@ body {
 
 .queued-song:hover {
     background-color: white;
-<<<<<<< HEAD
 }
 /* player css */
 #play {
@@ -269,7 +265,6 @@ body {
     height:166px;
     width: 166px;
     z-index: 1;
-=======
     color: black;
     filter: alpha(opacity=100); /* For IE8 and earlier */
     opacity: 1;
@@ -278,5 +273,4 @@ body {
     -ms-transition: all .5s ease;
     -o-transition: all .5s ease;
     transition: all .5s ease;
->>>>>>> refs/remotes/origin/master
 }
