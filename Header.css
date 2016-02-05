@@ -1,73 +1,47 @@
-html, body{
-height: 100%;
-width: 100%;
-margin: 0;
-padding: 0;
+body{
+    margin: 0;
+}
+#site-wrapper{
+position: relative;
+overflow: hidden;
 background-color: blue;
-
-}
-/* Side Sliding Menu */
-
-#menu-trigger {
-  display: none;
-}
-#menu-trigger + label {
-    background-color: grey;
-    color: white;
-    cursor: pointer;
-    padding: 20px 10px;
-    position: absolute;
-    top: 21;
-    left: 0;
-    z-index: 1; 
-    -webkit-transition: -webkit-transform .9s ease;
-    transition: transform .9s ease;
-    -webkit-user-select: none; /* users can't scroll select the icon */
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none; // future proofing
-    user-select: none; // future proofing
-}
-header {
-    background-color: grey;
-
+    width: 100%;
     height: 100%;
+}
+
+/* Side Sliding Menu */
+#screen-wrapper{
+    position: relative;
+    -webkit-transform: translateX(0);
+  -webkit-transition: 300ms ease all;
+  transition: 300ms ease all;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+#offscreen-list{
     width: 15vw;
-    overflow: auto;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    background: #428bca;
+    z-index: 0;
+    transform: translateX(-15vw);
+}
+#toggle-list{
+    padding: 5px 5px;
     position: absolute;
 
-    left: 0;
-     z-index: 1;
-     overflow-x: hidden;
-    -webkit-transform: translateX(-15vw);
-    -ms-transform: translateX(-15vw);
-    transform: translateX(-15vw);
-    -webkit-transition: -webkit-transform .9s ease;
-    transition: transform .9s ease;
+    background: #428bca;
 }
-
-body {
-    overflow-x: hidden; /* prevent a horizontal scrollbar from pushing the content right*/
-}
-#menu-trigger:checked + label {
+#screen-wrapper.hide-list {
     -webkit-transform: translateX(15vw);
-    -ms-transform: translateX(15vw);
     transform: translateX(15vw);
 }
-
-#menu-trigger:checked ~ header {
-    -webkit-transform: translateX(0px);
-    -ms-transform: translateX(0px);
-    transform: translateX(0px);
+#toggle-list.hide-list{
 }
 /* End of Side Sliding Menu */
 
 canvas{
-    position: relative;
-    height: auto;
-    width: 100%;
-    box-sizing: border-box;
-    display:block;
 }
 #screen{
     position: relative;
@@ -103,20 +77,20 @@ canvas{
 }
 #button-play{
     width: 33%;
-    border: none;
-    margin: none;
+    border: 0;
+    margin: 0;
     
 }
 #button-next{
     width: 33%;
-    border: none;
-    margin: none;
+    border: 0;
+    margin: 0;
     
 }
 #button-previous{
     width: 33%;
-    border: none;
-    margin: none;
+    border: 0;
+    margin: 0;
 }
 @media (max-width: 640px){ /*media query to adjust to small screen size*/
     #header{
