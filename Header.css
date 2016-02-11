@@ -5,8 +5,6 @@ body{
 position: relative;
 overflow: hidden;
 background-color: blue;
-    width: 100%;
-    height: 100%;
 }
 
 /* Side Sliding Menu */
@@ -48,55 +46,37 @@ canvas{
     overflow: hidden;
     z-index: 1;
 }
-#container{
-    text-align: center;
 
-}
+
 #header{
     background-color: grey;
     width:100%;
-    max-width: 68.5%;
-    max-height: 75px; /*huge in chrome w/o */
-    z-index: 1;
-   margin: auto;
+    height: 5%;
     display: flex;
     justify-content: space-between;
-    vertical-align: bottom;
-    
+  
 }
 #logo{
-   display: inline-block;
-    width: 10%;
+    max-height: 5%; 
+    width: 7%;
     text-align:left;
 }
 #player{
-    box-sizing:border-box;
-    display: inline-block;
+    max-height: 5%; 
+
     width: 25%;
     border: 2px solid white;
+    display: flex;
 }
 #button-play{
     width: 33%;
-    border: 0;
-    margin: 0;
-    
 }
 #button-next{
     width: 33%;
-    border: 0;
-    margin: 0;
-    
+
 }
 #button-previous{
     width: 33%;
-    border: 0;
-    margin: 0;
-}
-@media (max-width: 640px){ /*media query to adjust to small screen size*/
-    #header{
-        max-width: 100%;
-
-    }
 }
 
 /* search try */
