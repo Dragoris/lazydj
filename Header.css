@@ -17,13 +17,13 @@ background-color: blue;
   backface-visibility: hidden;
 }
 #offscreen-list{
-    width: 15vw;
+    width: 30vw;
     height: 100%;
     position: absolute;
     top: 0;
     background: #428bca;
     z-index: 0;
-    transform: translateX(-15vw);
+    transform: translateX(-30vw);
 }
 #toggle-list{
     padding: 5px 5px;
@@ -40,36 +40,46 @@ background-color: blue;
 /* End of Side Sliding Menu */
 
 canvas{
+
 }
-#screen{
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
+
 
 
 #header{
-    background-color: grey;
+    background-image: -moz-linear-gradient(
+        0% 100% 90deg,#1C1C1C, #404040, #1C1C1C 100%);
+    background-image: linear-gradient(
+        0% 100% 90deg,#1C1C1C, #404040, #1C1C1C 100%);
+      background-image: -webkit-radial-gradient(
+         100%,#404040, #1C1C1C 100%);
+
     width:100%;
     height: 5%;
+    display: -webkit-flex;
     display: flex;
-    justify-content: space-between;
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+    position: relative;
+
   
 }
 #logo{
-    max-height: 5%; 
-    width: 7%;
-    text-align:left;
+    display: flex;
+    flex: .5;
+    max-height: 125px; 
+
+    min-width: 7%;
+
 }
 #player{
-    max-height: 5%; 
-
-    width: 25%;
     border: 2px solid white;
     display: flex;
+    flex: 1;
+    align-items: center;
 }
 #button-play{
     width: 33%;
+
 }
 #button-next{
     width: 33%;
@@ -77,113 +87,53 @@ canvas{
 }
 #button-previous{
     width: 33%;
+
 }
 
-/* search try */
+/* search bar */
 .ui-autocomplete-loading {
     background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
 }
-
-.ui-autocomplete{
-    display: inline-block;
-    width: 40%;
-    box-sizing:border-box;
+.ui-autocomplete{ /* search result displayed*/
+    display: flex;
+    flex: 3;
     position: static;
+    flex-direction: column;
+    align-items: center;
 
 }
 .ui-autocomplete-input{ /* search bar */
-    background: rgba(0, 0, 0, 0.4);
-    height: 25px;
-    width: 100%;
+    display: flex;
     border-style: none;
     outline: none;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
     text-align: center;
-    /* easing back */
-    -webkit-transition: all 1s ease-out;
-    -moz-transition: all 1s ease-out;
-    -ms-transition: all 1s ease-out;
-    -o-transition: all 1s ease-out;
-    transition: all 1s ease-out;
+    flex:3 0 75%;
+}
+.ui-widget{
+    width: 75%;
+    display: flex;
+    align-items: center;
+    flex: 3;
 
 }
-.ui-autocomplete-input:hover, 
-.ui-autocomplete-input:focus, 
-.ui-autocomplete-input:active {
-    background-color: white;
-    color: black;
-    -webkit-transform: scale(1.25); 
-    -moz-transform: scale(1.25);
-    -ms-transform: scale(1.25);
-    -o-transform: scale(1.25);
-    transform: scale(1.25); /*Enlarge*/
-    -webkit-transition: all 1s ease;
-    -moz-transition: all 1s ease;
-    -ms-transition: all 1s ease;
-    -o-transition: all 1s ease;
-    transition: all 1s ease;
+@media handheld, screen and (max-width: 600px){
+    #header{ 
+        -moz flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+    #logo{
+       flex:1.5; 
+    } 
+    .ui-autocomplete-input{
+        width: 100%;
+    }
+    #player{
+        flex:1 auto;
+    }
 }
-/*Style the placeholder text of the search bar*/
-#search::-webkit-input-placeholder {
-   color: white;
-   opacity: 1;
-}
-#search:-moz-placeholder{
-    color: white;
-    opacity: 1;
-}
-#search::-moz-placeholder{
-    color: white;
-    opacity: 1;
-}
-#search:-ms-input-placeholder{
-    color: white;
-    opacity: 1;
-}
-/* on-hover for placeholder text */
-#search:hover::-moz-placeholder, 
-#search:active::-moz-placeholder, 
-#search:focus::-moz-placeholder {
-    color:black;
-    -webkit-transition: all 1s ease;
-    -moz-transition: all 1s ease;
-    -ms-transition: all 1s ease;
-    -o-transition: all 1s ease;
-    transition: all 1s ease;
-}
-#search:hover::-webkit-input-placeholder, 
-#search:active::-webkit-input-placeholder, 
-#search:focus::-webkit-input-placeholder {
-    color:black;
-    -webkit-transition: all 1s ease;
-    -moz-transition: all 1s ease;
-    -ms-transition: all 1s ease;
-    -o-transition: all 1s ease;
-    transition: all 1s ease;
-}
-#search:hover:-moz-placeholder, 
-#search:active:-moz-placeholder, 
-#search:focus:-moz-placeholder{
-    color:black;
-    -webkit-transition: all 1s ease;
-    -moz-transition: all 1s ease;
-    -ms-transition: all 1s ease;
-    -o-transition: all 1s ease;
-    transition: all 1s ease;
-}
-#search:hover:-ms-input-placeholder, 
-#search:active:-ms-input-placeholder, 
-#search:focus:-ms-input-placeholder{
-    color:black;
-    -webkit-transition: all 1s ease;
-    -moz-transition: all 1s ease;
-    -ms-transition: all 1s ease;
-    -o-transition: all 1s ease;
-    transition: all 1s ease;
-}
-
 .playlist { /* containing li's of selected songs*/
     padding: 0;
     margin: 0;
