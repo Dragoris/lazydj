@@ -50,8 +50,8 @@ background-color: blue;
     width: 100%;
 }
 #screen-wrapper.hide-list {
-    -webkit-transform: translateX(15vw);
-    transform: translateX(15vw);
+    -webkit-transform: translateX(30vw);
+    transform: translateX(30vw);
 }
 #toggle-list.hide-list{
 }
