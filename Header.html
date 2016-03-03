@@ -27,26 +27,29 @@
                 <!-- end of autocomplete search -->  
                
                 <div id="player">
-                    <img id="button-previous" src="images/previous.svg"></img>
-                    <img id="button-play" src="images/play.svg"></img>
-                    <img id="button-next" src="images/next.svg"></img>
+                    <img id="button-previous" src="images/whitenext.svg"></img>
+                    <img id="button-play" src="images/whiteplay.svg"></img>
+                    <img id="button-next" src="images/whitelast.svg"></img>
                 </div>
             </div>
         </div>
         
         <div id="screen-wrapper"> <!--keeps slider from going into the header -->
             <!-- Matt's Slide out bar code -->
-            <div id="offscreen-list">
-            </div>
-            <div id="toggle-list">Toggle list</div>
-                <!-- playlist holder -->
-                <div id="playlist-holder">
-                    <ul class="playlist">
-                        <div id='inject'>
-                        </div>
-                    <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="thumbnail" src=code-->
-                    </ul>
-                </div>
+            <div id="offscreen-list"></div>
+                <div class= "toggle-parent">
+                    <div id="toggle-list">
+                        <img id="playlistIcon" src="images/whiteplaylist.svg"></img>
+                    </div>
+                </div>    
+                    <!-- playlist holder -->
+                    <div id="playlist-holder">
+                        <ul class="playlist">
+                            <div id='inject'>
+                            </div>
+                        <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="thumbnail" src=code-->
+                        </ul>
+                    </div>
             <!-- end of matt's slide out code -->
         <!-- Boose's Face = canvas -->
             <canvas id="MainCanvas"></canvas> 

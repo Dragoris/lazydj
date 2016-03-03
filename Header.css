@@ -9,27 +9,45 @@ background-color: blue;
 
 /* Side Sliding Menu */
 #screen-wrapper{
-    position: relative;
     -webkit-transform: translateX(0);
   -webkit-transition: 300ms ease all;
   transition: 300ms ease all;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+
 }
 #offscreen-list{
     width: 30vw;
     height: 100%;
     position: absolute;
     top: 0;
-    background: #428bca;
+    background: black;
     z-index: 0;
     transform: translateX(-30vw);
 }
-#toggle-list{
-    padding: 5px 5px;
-    position: absolute;
+.toggle-parent{
+    display: flex;
+    flex-direction: column;
+    flex: 1 100%;
+    width: 100%;
 
-    background: #428bca;
+}
+#toggle-list{
+    display: flex;
+    align-items: center;
+
+    position: absolute;
+    
+    width: 7%;
+    height: 7%;
+    background-image: -moz-linear-gradient(
+        0% 100% 90deg,#1C1C1C, #404040, #1C1C1C 100%);
+    background-image: linear-gradient(
+        0% 100% 90deg,#1C1C1C, #404040, #1C1C1C 100%);
+    background-image: -webkit-radial-gradient(
+         100%,#404040, #1C1C1C 100%);
+}
+#playlistIcon{
+    height: 100%;
+    width: 100%;
 }
 #screen-wrapper.hide-list {
     -webkit-transform: translateX(15vw);
@@ -73,21 +91,23 @@ canvas{
 }
 #player{
     border: 2px solid white;
+    max-height: 125px;
     display: flex;
     flex: 1;
-    align-items: center;
+    justify-content: space-between;
+
 }
 #button-play{
-    width: 33%;
-
+    width: 28%;
+    padding: 2%;
 }
 #button-next{
-    width: 33%;
-
+    width: 28%;
+    padding: 2%;
 }
 #button-previous{
-    width: 33%;
-
+    width: 28%;
+    padding: 2%;
 }
 
 /* search bar */
@@ -111,6 +131,7 @@ canvas{
     border-radius: 5px;
     text-align: center;
     flex:3 0 75%;
+    font-size: 1em
 }
 .ui-widget{
     width: 75%;
@@ -132,6 +153,12 @@ canvas{
     }
     #player{
         flex:1 auto;
+
+    }
+    #button-play, #button-next, #button-previous{
+        padding: 2%;
+        width: 28%;
+        ;   
     }
 }
 .playlist { /* containing li's of selected songs*/
