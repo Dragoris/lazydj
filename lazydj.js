@@ -81,7 +81,8 @@ $(function() {
         return result;
     }
 });
-*/$(function() {
+*/
+$(function() {
 var imageObj = new Image();
 imageObj.onload = function () {
     canvas.width = window.innerWidth;
@@ -118,7 +119,7 @@ $("#search").autocomplete({
         SC.get('/tracks', {q: request.term}).then(function (songs) {
             //clean out the display_results array. to be shown to the user by autocomplete.
             var display_results = [];
-            //console.log(songs);
+            console.log(songs);
             for (var i = 0; i < songs.length; i++) {
                 var songObj = songs[i];
                 var index = i.toString() + " ";
@@ -172,8 +173,8 @@ $("#search").autocomplete({
 });
 // end of autocomplete
 
- /*//play and pause button
-document.getElementById('play').addEventListener('click', function(){
+//play and pause button
+document.getElementById('button-play').addEventListener('click', function(){
         if (currentPlayer && isPlaying == 1) {
             console.log("paused clicked");
             currentPlayer.pause();
@@ -186,7 +187,7 @@ document.getElementById('play').addEventListener('click', function(){
       });
 
 // next button
-document.getElementById('next').addEventListener('click', function(){
+document.getElementById('button-next').addEventListener('click', function(){
         console.log("currentIndex", currentIndex);
         console.log("playlist.length", playlist.length);
         if (currentIndex < playlist.length) {
@@ -201,7 +202,7 @@ document.getElementById('next').addEventListener('click', function(){
       });
       
 // previous button
-document.getElementById('previous').addEventListener('click', function(){
+document.getElementById('button-previous').addEventListener('click', function(){
         if (playlist.length >= 2 && currentIndex < playlist.length) {
             console.log("currentIndex prev", currentIndex);
             console.log("playlist.length prev", playlist.length);
@@ -211,4 +212,4 @@ document.getElementById('previous').addEventListener('click', function(){
         else {
             console.log("Something went wrong...");
         }
-      });*/
+      });
