@@ -147,7 +147,7 @@ $("#search").autocomplete({
     select: function (event, ui) {
         // ui variable is from the jquery autocomplete spec. We know it will have
         // the value of the item selected in the drop down list.
-        // we are using the made ui variable have 2 numbers.
+        // we are using the ui string variable to have 3 numbers.
         // to extract the meaningful numbers we are spliting the sting.
         var split = ui.item.value.split(" ");
         var songIndex = split[0];
@@ -157,7 +157,9 @@ $("#search").autocomplete({
         playlist.push(songUri);
         // play the first song only
         if (playlist.length == 1) {
-            SC.resolve(songUri).then(streamTrack);
+            SC.resolve(songUri).then(streamTrack).catch(function(){
+                console.log("error playing 1 track in playlist");
+            });
             currentIndex = 0;
         }
         $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[songIndex].artwork_url+'>'+tracks[songIndex].title+'</li></div>');
@@ -173,7 +175,7 @@ $("#search").autocomplete({
 });
 // end of autocomplete
 
-//play and pause button
+// play and pause button
 document.getElementById('button-play').addEventListener('click', function(){
         if (currentPlayer && isPlaying == 1) {
             console.log("paused clicked");
@@ -188,12 +190,15 @@ document.getElementById('button-play').addEventListener('click', function(){
 
 // next button
 document.getElementById('button-next').addEventListener('click', function(){
-        console.log("currentIndex", currentIndex);
+        console.log("currentIndex next", currentIndex);
         console.log("playlist.length", playlist.length);
         if (currentIndex < playlist.length) {
             currentIndex ++;
             console.log(playlist[currentIndex]);
-            SC.resolve(playlist[currentIndex]).then(streamTrack);
+            SC.resolve(playlist[currentIndex]).then(streamTrack).catch(function() {
+                console.log("caught error when playing to play next song in playlist.");
+                currentIndex --;
+            });
             
         }
         else {
@@ -207,9 +212,22 @@ document.getElementById('button-previous').addEventListener('click', function(){
             console.log("currentIndex prev", currentIndex);
             console.log("playlist.length prev", playlist.length);
             currentIndex --;
-            SC.resolve(playlist[currentIndex]).then(streamTrack);
+            SC.resolve(playlist[currentIndex]).then(streamTrack).catch(function() {
+               console.log("caught an error when trying to play the previous song.");
+               currentIndex ++;
+            });
         }
         else {
             console.log("Something went wrong...");
         }
       });
+      
+// queued song listener to play song you click on in playlist
+$(document).on('click', ".queued-song", function(event) {
+    console.log("I was clicked");
+    var targetElement = $(event.target);
+    console.log(targetElement);
+    var indexx = target.index();
+    console.log(target.text());
+    console.log(playlist, indexx);
+});
