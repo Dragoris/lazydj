@@ -32,7 +32,6 @@ background-color: blue;
 }
 #toggle-list{
     display: flex;
-    align-items: center;
 
     position: absolute;
     
@@ -71,13 +70,11 @@ canvas{
       background-image: -webkit-radial-gradient(
          100%,#404040, #1C1C1C 100%);
 
-    width:100%;
-    height: 5%;
     display: -webkit-flex;
     display: flex;
     -webkit-justify-content: space-around;
     justify-content: space-around;
-    position: relative;
+    align-items: center;
 
   
 }
@@ -85,29 +82,37 @@ canvas{
     display: flex;
     flex: .5;
     max-height: 125px; 
-
+    min-height: 80px;
     min-width: 7%;
+
 
 }
 #player{
     border: 2px solid white;
-    max-height: 125px;
     display: flex;
     flex: 1;
-    justify-content: space-between;
+    justify-content: center;
+    margin: 1em;
+    flex-direction: column;
+    flex-wrap: nowrap;
 
 }
-#button-play{
-    width: 28%;
-    padding: 2%;
+#buttons-wrapper{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap:nowrap;
+    height: 65px;
+
 }
-#button-next{
-    width: 28%;
-    padding: 2%;
+#button{
+    width: 23%;
+    padding: 10%;
+
 }
-#button-previous{
-    width: 28%;
-    padding: 2%;
+#title-box{
+    
+    background-color: red;
+
 }
 
 /* search bar */
@@ -154,11 +159,19 @@ canvas{
     #player{
         flex:1 auto;
 
+
+    }
+    #buttons{
+        flex:1;
     }
     #button-play, #button-next, #button-previous{
         padding: 2%;
-        width: 28%;
+        width: 25%;
         ;   
+    }
+    #toggle-list{
+        width: 15%;
+        height: 15%;
     }
 }
 .playlist { /* containing li's of selected songs*/
@@ -177,13 +190,14 @@ canvas{
 .thumbnail { /* album art */
     display: inline-block;
     float: left;
-    width: 60px;
+    width: 25%;
     padding-right: 5px;
 }
 .track-playlist { /*track name*/
     list-style-type: none;
     color: white;
     padding: 0;
+    font-size: 1em;
 
 }
 
