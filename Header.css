@@ -101,12 +101,13 @@ canvas{
     display: flex;
     justify-content: space-between;
     flex-wrap:nowrap;
-    height: 65px;
+
 
 }
 #button{
     width: 23%;
-    padding: 10%;
+    padding: 2%;
+    height: 65px;
 
 }
 #title-box{
