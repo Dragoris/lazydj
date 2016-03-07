@@ -69,49 +69,50 @@ canvas{
         0% 100% 90deg,#1C1C1C, #404040, #1C1C1C 100%);
       background-image: -webkit-radial-gradient(
          100%,#404040, #1C1C1C 100%);
-
     display: -webkit-flex;
     display: flex;
+    padding: 0 2%;
     -webkit-justify-content: space-around;
     justify-content: space-around;
-    align-items: center;
 
   
 }
 #logo{
     display: flex;
-    flex: .5;
     max-height: 125px; 
     min-height: 80px;
-    min-width: 7%;
+
 
 
 }
 #player{
-    border: 2px solid white;
     display: flex;
-    flex: 1;
+
+    flex:.5;
     justify-content: center;
-    margin: 1em;
+
     flex-direction: column;
     flex-wrap: nowrap;
 
 }
 #buttons-wrapper{
-    display: flex;
-    justify-content: space-between;
-    flex-wrap:nowrap;
 
+    display: flex;
+    justify-content: center;
+    flex-wrap:nowrap;
+    margin: .5em;
+    padding: .25em;
 
 }
 #button{
     width: 23%;
-    padding: 2%;
-    height: 65px;
+    height: 45px;
+    filter: drop-shadow(5px 5px 1px black);
+     -webkit-filter:drop-shadow(5px 5px 1px black);
 
 }
 #title-box{
-    
+    margin: 0 .5em .5em .5em;
     background-color: red;
 
 }
@@ -122,10 +123,12 @@ canvas{
 }
 .ui-autocomplete{ /* search result displayed*/
     display: flex;
-    flex: 3;
+    flex:1;
+
     position: static;
     flex-direction: column;
     align-items: center;
+
 
 }
 .ui-autocomplete-input{ /* search bar */
@@ -136,14 +139,14 @@ canvas{
     -moz-border-radius: 5px;
     border-radius: 5px;
     text-align: center;
-    flex:3 0 75%;
+    flex:1.5;
     font-size: 1em
 }
 .ui-widget{
-    width: 75%;
     display: flex;
     align-items: center;
-    flex: 3;
+    flex: 2;
+    width: 50%
 
 }
 @media handheld, screen and (max-width: 600px){
