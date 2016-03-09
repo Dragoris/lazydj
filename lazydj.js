@@ -1,18 +1,113 @@
-var canvas = document.getElementById("MainCanvas");
-var context = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+$(function() {
+    var listButton = document.getElementById('toggle-list');
+    var list = document.getElementById('screen-wrapper');
+    listButton.addEventListener('click', function(){
+            if(listButton.classList.contains("hide-list")) {
+                listButton.classList.remove("hide-list");
+                list.classList.remove("hide-list");
+            }else{
+                listButton.classList.add("hide-list");
+                list.classList.add("hide-list");
+            }
+    });
+});
+
+$(function() {
+    var canvas = document.getElementById("MainCanvas");
+    var context = canvas.getContext("2d");
+    var listButton = document.getElementById('toggle-list');
+    var list = document.getElementById('screen-wrapper');
+    window.onresize = resizeCanvas;
+        initialize();
+    function  initialize() {
+        listButton.addEventListener('click', resizeCanvas);
+        resizeCanvas();
+    }
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        redraw();
+    }
+    function redraw() {
+        var imageObj = new Image();
+        imageObj.src = "images/Boose Boosington.jpg";
+        imageObj.onload = function () {
+        context.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
+        };
+    }
+    
+});
+/*$(function() {
+
+    function ScaleImage(srcwidth, srcheight, targetwidth, targetheight, fLetterBox) {
+
+        var result = { width: 0, height: 0, fScaleToTargetWidth: true };
+
+        if ((srcwidth <= 0) || (srcheight <= 0) || (targetwidth <= 0) || (targetheight <= 0)) {
+            return result;
+        }
+
+        // scale to the target width
+        var scaleX1 = targetwidth;
+        var scaleY1 = (srcheight * targetwidth) / srcwidth;
+
+        // scale to the target height
+        var scaleX2 = (srcwidth * targetheight) / srcheight;
+        var scaleY2 = targetheight;
+
+        // now figure out which one we should use
+        var fScaleOnWidth = (scaleX2 > targetwidth);
+        if (fScaleOnWidth) {
+            fScaleOnWidth = fLetterBox;
+        }
+        else {
+           fScaleOnWidth = !fLetterBox;
+        }
+
+        if (fScaleOnWidth) {
+            result.width = Math.floor(scaleX1);
+            result.height = Math.floor(scaleY1);
+            result.fScaleToTargetWidth = true;
+        }
+        else {
+            result.width = Math.floor(scaleX2);
+            result.height = Math.floor(scaleY2);
+            result.fScaleToTargetWidth = false;
+        }
+        result.targetleft = Math.floor((targetwidth - result.width) / 2);
+        result.targettop = Math.floor((targetheight - result.height) / 2);
+
+        return result;
+    }
+});
+*/
+$(function() {
 var imageObj = new Image();
 imageObj.onload = function () {
-    var wRatio = canvas.width / imageObj.width;
-    var hRatio = canvas.height / imageObj.height;
-    var ratio = Math.min(wRatio, hRatio);
+    canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas.width = canvas.height *
+                    (canvas.clientWidth / canvas.clientHeight);
     context.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
 };
-imageObj.src = "images/Boose Boosington.jpg";
-
+});
 // globals for tracks and playlists.
 var tracks, playlist = [];
+
+// stream track plus some globals to help out
+var currentPlayer, isPlaying, currentIndex;
+var streamTrack = function(track){
+    return SC.stream('/tracks/' + track.id).then(function(player){
+      currentPlayer = player;
+      player.play();
+      isPlaying = 1;
+      console.log("streamTrack");
+    }).catch(function(){
+      console.log(arguments);
+    }); //end of return
+};
+
 // initializing soundcloud (SC object)
 SC.initialize({
     client_id: 'b11dd654670362e6d5b12263d9f51b78'
@@ -26,12 +121,13 @@ $("#search").autocomplete({
             var display_results = [];
             console.log(songs);
             for (var i = 0; i < songs.length; i++) {
-                var song_obj = songs[i];
-                var id = i.toString() + " ";
-                if(song_obj.streamable) {
+                var songObj = songs[i];
+                var index = i.toString() + " ";
+                var uri = " " + songObj.uri;
+                if(songObj.streamable) {
                     display_results.push({
-                        label: song_obj.title,
-                        value: id + song_obj.id
+                        label: songObj.title,
+                        value: index + songObj.id + uri
                     });
                 }
                 else {
@@ -39,7 +135,7 @@ $("#search").autocomplete({
                 }
             } // end of for loop
             tracks = songs;
-            console.log("track", tracks);
+            //console.log("track", tracks);
             response(display_results);
         }).catch(function() {
             console.log("failed search", arguments);
@@ -49,15 +145,24 @@ $("#search").autocomplete({
     minLength: 3, //min input length needed to fire source anon func
     // select is run when user selects a link
     select: function (event, ui) {
-            var split = ui.item.value.split(" ");
-            console.log(split[0], split[1]);
-            SC.stream("/tracks/"+ split[1]).then(function(player){
-            player.play();
-            // inject html
-            $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[split[0]].artwork_url+'>'+tracks[split[0]].title+'</li></div>');
-        }).catch(function() {
-            console.log("failed streaming", arguments);
-        });
+        // ui variable is from the jquery autocomplete spec. We know it will have
+        // the value of the item selected in the drop down list.
+        // we are using the ui string variable to have 3 numbers.
+        // to extract the meaningful numbers we are spliting the sting.
+        var split = ui.item.value.split(" ");
+        var songIndex = split[0];
+        var sondID = split[1];
+        var songUri = split[2];
+        // add selected song to playlist array
+        playlist.push(songUri);
+        // play the first song only
+        if (playlist.length == 1) {
+            SC.resolve(songUri).then(streamTrack).catch(function(){
+                console.log("error playing 1 track in playlist");
+            });
+            currentIndex = 0;
+        }
+        $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[songIndex].artwork_url+'>'+tracks[songIndex].title+'</li></div>');
         return false; // so we won't have the value put in the search box after selected
     },
     open: function () {
@@ -69,3 +174,62 @@ $("#search").autocomplete({
 
 });
 // end of autocomplete
+
+// play and pause button
+document.getElementById('button-play').addEventListener('click', function(){
+        if (currentPlayer && isPlaying == 1) {
+            console.log("paused clicked");
+            currentPlayer.pause();
+            isPlaying = 0;
+        }
+        else if (currentPlayer && isPlaying == 0) {
+            currentPlayer.play();
+            isPlaying = 1;
+        }
+      });
+
+// next button
+document.getElementById('button-next').addEventListener('click', function(){
+        console.log("currentIndex next", currentIndex);
+        console.log("playlist.length", playlist.length);
+        if (currentIndex < playlist.length) {
+            currentIndex ++;
+            console.log(playlist[currentIndex]);
+            SC.resolve(playlist[currentIndex]).then(streamTrack).catch(function() {
+                console.log("caught error when playing to play next song in playlist.");
+                currentIndex --;
+            });
+            
+        }
+        else {
+            console.log("No songs next in playlist");
+        }
+      });
+      
+// previous button
+document.getElementById('button-previous').addEventListener('click', function(){
+        if (playlist.length >= 2 && currentIndex < playlist.length) {
+            console.log("currentIndex prev", currentIndex);
+            console.log("playlist.length prev", playlist.length);
+            currentIndex --;
+            SC.resolve(playlist[currentIndex]).then(streamTrack).catch(function() {
+               console.log("caught an error when trying to play the previous song.");
+               currentIndex ++;
+            });
+        }
+        else {
+            console.log("Something went wrong...");
+        }
+      });
+      
+// queued song listener to play song you click on in playlist
+$(document).on('click', ".queued-song", function(event) {
+    console.log("I was clicked");
+    var targetElement = $(event.target);
+    console.log(targetElement);
+    var indexx = target.index();
+    console.log(target.text());
+    console.log(playlist, indexx);
+});
+$('#title-box').html($('#track-playlist').html());
+

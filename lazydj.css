@@ -3,20 +3,8 @@ height: 100%;
 width: 100%;
 margin: 0;
 padding: 0;
+background-color: blue;
 
-}
-
-canvas{
-	position: relative;
-	height: auto;
-	width: 100%;
-	box-sizing: border-box;
-    display:block;
-}
-
-/* search try */
-.ui-autocomplete-loading {
-    background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
 }
 /* Side Sliding Menu */
 
@@ -24,13 +12,12 @@ canvas{
   display: none;
 }
 #menu-trigger + label {
-    background-color: #fff;
-    background: rgba(0, 0, 0, 0.4);
+    background-color: grey;
     color: white;
     cursor: pointer;
     padding: 20px 10px;
     position: absolute;
-    top: 0;
+    top: 21;
     left: 0;
     z-index: 1; 
     -webkit-transition: -webkit-transform .9s ease;
@@ -42,19 +29,19 @@ canvas{
     user-select: none; // future proofing
 }
 header {
-    background-color: #fff;
-    background: rgba(0, 0, 0, 0.4);
+    background-color: grey;
+
     height: 100%;
-    width: 250px;
+    width: 15vw;
     overflow: auto;
-    position: fixed;
-    top: 0;
+    position: absolute;
+
     left: 0;
      z-index: 1;
      overflow-x: hidden;
-    -webkit-transform: translateX(-250px);
-    -ms-transform: translateX(-250px);
-    transform: translateX(-250px);
+    -webkit-transform: translateX(-15vw);
+    -ms-transform: translateX(-15vw);
+    transform: translateX(-15vw);
     -webkit-transition: -webkit-transform .9s ease;
     transition: transform .9s ease;
 }
@@ -63,9 +50,9 @@ body {
     overflow-x: hidden; /* prevent a horizontal scrollbar from pushing the content right*/
 }
 #menu-trigger:checked + label {
-    -webkit-transform: translateX(250px);
-    -ms-transform: translateX(250px);
-    transform: translateX(250px);
+    -webkit-transform: translateX(15vw);
+    -ms-transform: translateX(15vw);
+    transform: translateX(15vw);
 }
 
 #menu-trigger:checked ~ header {
@@ -75,39 +62,91 @@ body {
 }
 /* End of Side Sliding Menu */
 
-#container-1 {
-    display: inline-block;
+canvas{
     position: relative;
+    height: auto;
     width: 100%;
-    margin: 0 auto;
+    box-sizing: border-box;
+    display:block;
 }
-.ui-widget {
-    display: inline-block;
-    width: 100%;
-    margin: 0 0 0 -33%;
-    left: 66%;
-    position: absolute;
+#screen{
+    position: relative;
+    overflow: hidden;
     z-index: 1;
 }
-.ui-autocomplete{ /* song suggestions */
-    background-color: white;
-    filter: alpha(opacity=80); /* For IE8 and earlier */
-    opacity: 0.8;
+#container{
+    text-align: center;
+
 }
-.ui-autocomplete:hover {
-   
+#header{
+    background-color: grey;
+    width:100%;
+    max-width: 68.5%;
+    max-height: 75px; /*huge in chrome w/o */
+    z-index: 1;
+   margin: auto;
+    display: flex;
+    justify-content: space-between;
+    vertical-align: bottom;
+    
+}
+#logo{
+   display: inline-block;
+    width: 10%;
+    text-align:left;
+}
+#player{
+    box-sizing:border-box;
+    display: inline-block;
+    width: 25%;
+    border: 2px solid white;
+}
+#button-play{
+    width: 33%;
+    border: none;
+    margin: none;
+    
+}
+#button-next{
+    width: 33%;
+    border: none;
+    margin: none;
+    
+}
+#button-previous{
+    width: 33%;
+    border: none;
+    margin: none;
+}
+@media (max-width: 640px){ /*media query to adjust to small screen size*/
+    #header{
+        max-width: 100%;
+
+    }
+}
+
+/* search try */
+.ui-autocomplete-loading {
+    background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
+}
+
+.ui-autocomplete{
+    display: inline-block;
+    width: 40%;
+    box-sizing:border-box;
+    position: static;
+
 }
 .ui-autocomplete-input{ /* search bar */
-    width: 33%;
     background: rgba(0, 0, 0, 0.4);
     height: 25px;
-    margin-top: 13px;
-    padding-left: 5px;
+    width: 100%;
     border-style: none;
     outline: none;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    text-align: center;
     /* easing back */
     -webkit-transition: all 1s ease-out;
     -moz-transition: all 1s ease-out;
@@ -121,15 +160,11 @@ body {
 .ui-autocomplete-input:active {
     background-color: white;
     color: black;
-    border: 1px solid black;
     -webkit-transform: scale(1.25); 
     -moz-transform: scale(1.25);
     -ms-transform: scale(1.25);
     -o-transform: scale(1.25);
     transform: scale(1.25); /*Enlarge*/
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    border-radius: 12px;
     -webkit-transition: all 1s ease;
     -moz-transition: all 1s ease;
     -ms-transition: all 1s ease;
@@ -203,10 +238,10 @@ body {
 
 }
 /* loading li's sliding into place*/
-@-webkit-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
-@-moz-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
-@-o-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
-    @keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
+@-webkit-keyframes playlist-animation { from { transform: translateX(-15vw); } to { transform: translateX(0px); }  }
+@-moz-keyframes playlist-animation { from { transform: translateX(-15vw); } to { transform: translateX(0px); }  }
+@-o-keyframes playlist-animation { from { transform: translateX(-15vw); } to { transform: translateX(0px); }  }
+    @keyframes playlist-animation { from { transform: translateX(-15vw); } to { transform: translateX(0px); }  }
 
 .thumbnail { /* album art */
     display: inline-block;
@@ -225,10 +260,10 @@ body {
     color: black;
 }
 /* loading li's sliding into place*/
-@-webkit-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
-@-moz-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
-@-o-keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
-    @keyframes playlist-animation { from { transform: translateX(-250px); } to { transform: translateX(0px); }  }
+@-webkit-keyframes playlist-animation { from { transform: translateX(-15vw); } to { transform: translateX(0px); }  }
+@-moz-keyframes playlist-animation { from { transform: translateX(-15vw); } to { transform: translateX(0px); }  }
+@-o-keyframes playlist-animation { from { transform: translateX(-15vw); } to { transform: translateX(0px); }  }
+    @keyframes playlist-animation { from { transform: translateX(-15vw); } to { transform: translateX(0px); }  }
 
 .queued-song { 
     display: inline-block;

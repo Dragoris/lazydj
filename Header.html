@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>LazyDJ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Loading external style sheets -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    
+    <!-- Loading external js libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+    <!-- Loading our own style sheet -->
+</head>
+<body>
+    <div id="site-wrapper">    
+        <div id= 'header-wrapper'>
+            <div id ='header'> 
+                 <img id= "logo"src="images/lazy_dj_logo.png">
+                <!-- autocomplete search -->
+            <div class ="ui-autocomplete">
+             <!-- testing search -->
+                <div class="ui-widget">
+                  <input id="search" placeholder="Build your playlist">
+                </div>
+            </div>    
+                <!-- end of autocomplete search -->  
+               
+                <div id="player">
+                    <div id="buttons-wrapper">
+                        <img id="button" src="images/whitenext.svg"></img>
+                        <img id="button" src="images/whiteplay.svg"></img>
+                        <img id="button" src="images/whitelast.svg"></img>
+                    </div>
+                    <div id ="title-box"> Song Title </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="screen-wrapper"> <!--keeps slider from going into the header -->
+            <!-- Matt's Slide out bar code -->
+                <div class= "toggle-parent">
+                        <div id="toggle-list">
+                            <img id="playlistIcon" src="images/whiteplaylist.svg"></img>
+                        </div>
+                </div>         
+            <div id="offscreen-list">  
+                    <!-- playlist holder -->
+                    <div id="playlist-holder">
+                        <ul class="playlist">
+                            <div id='inject'>
+                            </div>
+                        <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="thumbnail" src=code-->
+                        </ul>
+                    </div>
+            <!-- end of matt's slide out code -->
+        <!-- Boose's Face = canvas -->
+            </div>
+                <canvas id="MainCanvas"></canvas> 
+            </div>
+       </div>
+    <link rel="stylesheet" type="text/css" href="header.css">
+    <style type="text/css"></style>
+    <script type="text/javascript" src="whack.js"></script>
+    </body>
+</html>

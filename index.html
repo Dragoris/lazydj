@@ -12,27 +12,44 @@
     <!-- Loading our own style sheet -->
 </head>
 <body>
-    <!-- Matt's Slide out bar code -->
-    <input id="menu-trigger" type="checkbox"/>
-    <label for="menu-trigger">9836</label>
-    <!-- playlist holder -->
-    <header>
-        <ul class="playlist">
-        <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="thumbnail" src=code-->
-        </ul>
-    </header>
-    <!-- end of matt's slide out code -->
-    <!-- autocomplete search -->
-    <div class ="container-1">
-     <!-- testing search -->
-        <div class="ui-widget">
-          <input id="search" placeholder="Build your playlist">
+    <div id= 'container'>
+        <div id ='header'> 
+             <img id= "logo"src="images/lazy_dj_logo.png">
+            <!-- autocomplete search -->
+            <div class ="ui-autocomplete">
+             <!-- testing search -->
+                <div class="ui-widget">
+                  <input id="search" placeholder="Build your playlist">
+                </div>
+            </div>    
+            <!-- end of autocomplete search -->  
+           
+            <div id="player">
+                <img id="button-previous" src="images/previous.svg"></img>
+                <img id="button-play" src="images/play.svg"></img>
+                <img id="button-next" src="images/next.svg"></img>
+
+            </div>
         </div>
-    </div>    
-    <!-- end of autocomplete search -->
-    <!-- Boose's Face = canvas -->
-    <canvas id="MainCanvas"></canvas>
+    </div>
     
+    <div id="screen"> <!--keeps slider from going into the header -->
+        <!-- Matt's Slide out bar code -->
+        <input id="menu-trigger" type="checkbox"/>
+        <label for="menu-trigger">&#9836</label>
+        <!-- playlist holder -->
+        <header>
+            <ul class="playlist">
+                <div id='inject'>
+                </div>
+            <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="thumbnail" src=code-->
+            </ul>
+        </header>
+        <!-- end of matt's slide out code -->
+    <!-- Boose's Face = canvas -->
+        <canvas id="MainCanvas"></canvas> 
+    </div>
+   
 <link rel="stylesheet" type="text/css" href="lazydj.css">
 <style type="text/css"></style>
 <script type="text/javascript" src="lazydj.js"></script>
