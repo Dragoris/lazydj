@@ -74,6 +74,7 @@ canvas{
     padding: 0 2%;
     -webkit-justify-content: space-around;
     justify-content: space-around;
+    align-items: center;
 
   
 }
@@ -81,7 +82,7 @@ canvas{
     display: flex;
     max-height: 125px; 
     min-height: 80px;
-
+    flex:.05;
 
 
 }
@@ -98,7 +99,7 @@ canvas{
 #buttons-wrapper{
 
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     flex-wrap:nowrap;
     margin: .5em;
     padding: .25em;
@@ -111,9 +112,20 @@ canvas{
      -webkit-filter:drop-shadow(5px 5px 1px black);
 
 }
+#button:hover{
+    opacity: 0.9;
+}
+#button:active{
+    filter: none;
+     -webkit-filter:none;
+    height: 44px; 
+    transition: all .1s ease;
+}
 #title-box{
+
     margin: 0 .5em .5em .5em;
-    background-color: red;
+    color: white;
+
 
 }
 
@@ -155,7 +167,7 @@ canvas{
         flex-wrap: wrap;
     }
     #logo{
-       flex:1.5; 
+       flex:.05; 
     } 
     .ui-autocomplete-input{
         width: 100%;

@@ -231,3 +231,5 @@ $(document).on('click', ".queued-song", function(event) {
     console.log(target.text());
     console.log(playlist, indexx);
 });
+$('#title-box').html($('#track-playlist').html());
+
