@@ -7,11 +7,18 @@ SC.initialize({
 $("#search").autocomplete({
     source: function (request, response) {
         SC.get('/tracks', {q: request.term}).then(function (songs) {
+            console.log('1');
+            songs = JSON.parse(songs).filter(function(streamCheck){
+                console.log('2');
+                return songs.streamable;
+            }).map(function(songs){
+                console.log('3');
+                return {lable: songs.title, value: songs.uri + id};
+            });
+            response(songs);
+            console.log('4');
+        });
 
-var json = JSON.parse(response.responseText);
-        alert(json.responseText);
-        console.log(json.responseText);
-        alert(json.name);       });
     },
     maxResults: 10,
     minLength: 3, //min input length needed to fire source anon func
