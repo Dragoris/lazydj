@@ -7,16 +7,12 @@ SC.initialize({
 $("#search").autocomplete({
     source: function (request, response) {
         SC.get('/tracks', {q: request.term}).then(function (songs) {
-            console.log('1');
-            songs = JSON.parse(songs).filter(function(streamCheck){
-                console.log('2');
-                return songs.streamable;
-            }).map(function(songs){
-                console.log('3');
-                return {lable: songs.title, value: songs.uri + id};
+            songs = songs.filter(function(streamCheck){
+                return streamCheck.streamable;
+            }).map(function(streamCheck){
+                return {label: streamCheck.title, value: streamCheck.uri + streamCheck.id};
             });
             response(songs);
-            console.log('4');
         });
 
     },
@@ -28,6 +24,8 @@ $("#search").autocomplete({
         // the value of the item selected in the drop down list.
         // we are using the ui string variable to have 3 numbers.
         // to extract the meaningful numbers we are spliting the sting.
+        
+        console.log(ui);
         var split = ui.item.value.split(" ");
         var songIndex = split[0];
         var sondID = split[1];
