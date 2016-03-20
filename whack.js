@@ -3,55 +3,57 @@ SC.initialize({
     client_id: 'b11dd654670362e6d5b12263d9f51b78'
 });
 
-// autocomplete thingy
-$("#search").autocomplete({
-    source: function (request, response) {
-        SC.get('/tracks', {q: request.term}).then(function (songs) {
-            songs = songs.filter(function(streamCheck){
-                return streamCheck.streamable;
-            }).map(function(streamCheck){
-                return {label: streamCheck.title, value: streamCheck.uri + streamCheck.id};
-            });
-            response(songs);
-        });
 
-    },
-    maxResults: 10,
-    minLength: 3, //min input length needed to fire source anon func
-    // select is run when user selects a link
-    select: function (event, ui) {
-        // ui variable is from the jquery autocomplete spec. We know it will have
-        // the value of the item selected in the drop down list.
-        // we are using the ui string variable to have 3 numbers.
-        // to extract the meaningful numbers we are spliting the sting.
-        
-        console.log(ui);
-        var split = ui.item.value.split(" ");
-        var songIndex = split[0];
-        var sondID = split[1];
-        var songUri = split[2];
-        // add selected song to playlist array
-        playlist.push(songUri);
-        // play the first song only
-        if (playlist.length == 1) {
-            SC.resolve(songUri).then(streamTrack).catch(function(){
+lazyDj = function () {
+    var currentPlayer, isPlaying, currentIndex, tracks;
+    var playlist = [];
+    
+    var streamTrack = function(track){
+        return SC.stream('/tracks/' + track.id).then(function(player){
+          currentPlayer = player;
+          player.play();
+          isPlaying = 1;
+          console.log("streamTrack");
+            }).catch(function(){
+          console.log(arguments);
+        }); //end of return
+        };
+    // autocomplete
+    $("#search").autocomplete({
+        source: function (request, response) {
+            SC.get('/tracks', {q: request.term}).then(function (songs) {
+                songs = songs.filter(function(streamCheck){
+                    return streamCheck.streamable;
+                }).map(function(streamCheck){
+                    return {label: streamCheck.title, value: streamCheck.uri};
+                });
+                response(songs);
+            });
+
+        },
+        maxResults: 10,
+        minLength: 3, //min input length needed to fire source anon func
+        // select is run when user selects a link
+        select: function (event, ui) {
+            // ui variable is from the jquery autocomplete spec. We know it will have
+            // the value of the item selected in the drop down list.
+            console.log(ui.item.value);
+            SC.resolve(ui.item.value).then(streamTrack).catch(function(){
                 console.log("error playing 1 track in playlist");
+                currentIndex = 0;
+            $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[songIndex].artwork_url+'>'+tracks[songIndex].title+'</li></div>');
+                
             });
-            currentIndex = 0;
+           return false; // so we won't have the value put in the search box after selected
+        },
+        open: function () {
+            $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
+        },
+        close: function() {
+            $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
         }
-        $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[songIndex].artwork_url+'>'+tracks[songIndex].title+'</li></div>');
-        return false; // so we won't have the value put in the search box after selected
-    },
-    open: function () {
-        $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
-    },
-    close: function() {
-        $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
-    }
-
-});
-
-
+    });
+}();
 
 
 
