@@ -29,7 +29,6 @@ lazyDj = function () {
                 });
                 response(songs);
             });
-
         },
         maxResults: 10,
         minLength: 3, //min input length needed to fire source anon func
@@ -37,13 +36,14 @@ lazyDj = function () {
         select: function (event, ui) {
             // ui variable is from the jquery autocomplete spec. We know it will have
             // the value of the item selected in the drop down list.
-            console.log(ui.item.value);
-            SC.resolve(ui.item.value).then(streamTrack).catch(function(){
-                console.log("error playing 1 track in playlist");
-                currentIndex = 0;
-            $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[songIndex].artwork_url+'>'+tracks[songIndex].title+'</li></div>');
+            
+            SC.resolve(ui.item.value).then(function (addToPlaylist){
+                console.log(SC.resolve(ui.item.value));
+                console.log(SC.resolve(ui.item.value.V));
+                $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+ result.artwork_url+'>'+ result.title+'</li></div>');
+                });
                 
-            });
+            
            return false; // so we won't have the value put in the search box after selected
         },
         open: function () {
