@@ -105,17 +105,17 @@ canvas{
     padding: .25em;
 
 }
-#button{
+.button{
     width: 23%;
     height: 45px;
     filter: drop-shadow(5px 5px 1px black);
      -webkit-filter:drop-shadow(5px 5px 1px black);
 
 }
-#button:hover{
+.button:hover{
     opacity: 0.9;
 }
-#button:active{
+.button:active{
     filter: none;
      -webkit-filter:none;
     height: 44px; 

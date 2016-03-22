@@ -150,6 +150,7 @@ $("#search").autocomplete({
         // we are using the ui string variable to have 3 numbers.
         // to extract the meaningful numbers we are spliting the sting.
         var split = ui.item.value.split(" ");
+        console.log(ui.item.value);
         var songIndex = split[0];
         var sondID = split[1];
         var songUri = split[2];
