@@ -5,7 +5,7 @@ SC.initialize({
 
 
 lazyDj = function () {
-    var currentPlayer, isPlaying, currentIndex, tracks;
+    var currentPlayer, isPlaying, currentIndex;
     var playlist = [];
     
     var streamTrack = function(track){
@@ -22,12 +22,14 @@ lazyDj = function () {
     $("#search").autocomplete({
         source: function (request, response) {
             SC.get('/tracks', {q: request.term}).then(function (songs) {
+                //filtering results to only get streamable songs
                 songs = songs.filter(function(streamCheck){
                     return streamCheck.streamable;
+                //chaining methods to format filtered songs and return a new array
                 }).map(function(streamCheck){
-                    return {label: streamCheck.title, value: streamCheck.uri};
+                    return {label: streamCheck.title, value: streamCheck.uri}; // whats sent when a song is selected
                 });
-                response(songs);
+                response(songs); //list of songs presented to user
             });
         },
         maxResults: 10,
@@ -35,16 +37,23 @@ lazyDj = function () {
         // select is run when user selects a link
         select: function (event, ui) {
             // ui variable is from the jquery autocomplete spec. We know it will have
-            // the value of the item selected in the drop down list.
-            
-            SC.resolve(ui.item.value).then(function (addToPlaylist){
-                console.log(SC.resolve(ui.item.value));
-                console.log(SC.resolve(ui.item.value.V));
-                $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+ result.artwork_url+'>'+ result.title+'</li></div>');
+            // the lable and value returned in source:.
+            playlist.push(ui.item.value); // add selected song to the paylist
+            //accessing the selected songs JSON properties to add them to the side menu.
+            SC.resolve(ui.item.value).then(function (append){
+                console.log(append);
+                $(".playlist").append('<div class="queued-song"><div class="track-playlist"><img class="thumbnail" src='+ append.artwork_url+'>'+ append.title+'<a href='+append.user.permalink_url+ ' target="_blank"><img class=user src ='+ append.user.avatar_url+' </a></div></div>');
+            });
+
+            if (playlist.length == 1) { // play the first song only
+                SC.resolve(ui.item.value).then(streamTrack).catch(function(){
+                    console.log("error playing 1 track in playlist");
+                    currentIndex = 0;
                 });
-                
-            
-           return false; // so we won't have the value put in the search box after selected
+            }
+            return false; // so we won't have the value put in the search box after selected
+           
+           
         },
         open: function () {
             $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
