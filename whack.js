@@ -3,21 +3,30 @@ SC.initialize({
     client_id: 'b11dd654670362e6d5b12263d9f51b78'
 });
 
-
 lazyDj = function () {
-    var currentPlayer, isPlaying, currentIndex;
+    var currentPlayer, isPlaying, currentIndex, titleIndex;
     var playlist = [];
+    var trackNames= [];
     
     var streamTrack = function(track){
         return SC.stream('/tracks/' + track.id).then(function(player){
           currentPlayer = player;
           player.play();
           isPlaying = 1;
-          console.log("streamTrack");
+          currentTitle();
+          console.log(currentIndex);
             }).catch(function(){
           console.log(arguments);
         }); //end of return
         };
+    //trying to set title-box to show the current song. 
+    function currentTitle() {
+        if (currentIndex !== titleIndex){
+            console.log("title check");
+            titleIndex = currentIndex;
+        $('#title-box').html(trackNames[titleIndex]);
+        }
+    }
     // autocomplete
     $("#search").autocomplete({
         source: function (request, response) {
@@ -34,26 +43,35 @@ lazyDj = function () {
         },
         maxResults: 10,
         minLength: 3, //min input length needed to fire source anon func
-        // select is run when user selects a link
         select: function (event, ui) {
             // ui variable is from the jquery autocomplete spec. We know it will have
             // the lable and value returned in source:.
-            playlist.push(ui.item.value); // add selected song to the paylist
+            playlist.push(ui.item.value);
+            console.log(playlist); // add selected song to the paylist
             //accessing the selected songs JSON properties to add them to the side menu.
-            SC.resolve(ui.item.value).then(function (append){
-                console.log(append);
-                $(".playlist").append('<div class="queued-song"><div class="track-playlist"><img class="thumbnail" src='+ append.artwork_url+'>'+ append.title+'<a href='+append.user.permalink_url+ ' target="_blank"><img class=user src ='+ append.user.avatar_url+' </a></div></div>');
-            });
+            SC.resolve(ui.item.value).then(function (appendHTML){
+                console.log(appendHTML);
+                // sending HTML to the side menu
+                $(".playlist").append('<div class="queued-song"><div class="track-playlist"><img class="thumbnail" src='+ appendHTML.artwork_url+'>'+ appendHTML.title+'<a href='+appendHTML.user.permalink_url+ ' target="_blank"><img class=user src ='+ appendHTML.user.avatar_url+' </a></div></div>');
+                $('img').error(function(){ //back img if .artwork_url=null
+                    $(this).attr('src', 'http://gfm.fm/assets/img/default-albumart.png');
+                }).then(function (appendHTML){
+                        trackNames.push(appendHTML.title);
+                        console.log(trackNames);
+                        
 
+                    });
+            });
             if (playlist.length == 1) { // play the first song only
                 SC.resolve(ui.item.value).then(streamTrack).catch(function(){
                     console.log("error playing 1 track in playlist");
                     currentIndex = 0;
-                });
-            }
+                    currentTitle();
+                    });
+
+                }
+             
             return false; // so we won't have the value put in the search box after selected
-           
-           
         },
         open: function () {
             $(this).removeClass("ui-corner-all").addClass("ui-corner-top");
@@ -62,6 +80,69 @@ lazyDj = function () {
             $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
         }
     });
+    
+    // play and pause button
+    document.getElementById('play').addEventListener('click', function(){
+        if (currentPlayer && isPlaying == 1) {
+            console.log("paused clicked");
+            currentPlayer.pause();
+            isPlaying = 0;
+        }
+        else if (currentPlayer && isPlaying === 0) {
+            currentPlayer.play();
+            isPlaying = 1;
+        }
+      });
+
+
+    // next button
+    document.getElementById('next').addEventListener('click', function(){
+        console.log("currentIndex next", currentIndex);
+        console.log("playlist.length", playlist.length);
+        if (currentIndex < playlist.length) {
+            currentIndex ++;
+            currentTitle();
+            console.log(playlist[currentIndex]);
+            SC.resolve(playlist[currentIndex]).then(streamTrack).catch(function() {
+                console.log("caught error when playing to play next song in playlist.");
+                currentIndex --;
+                currentTitle();
+            });
+            
+        }
+        else {
+            console.log("No songs next in playlist");
+        }
+      });
+      
+    // previous button
+    document.getElementById('last').addEventListener('click', function(){
+        if (playlist.length >= 2 && currentIndex < playlist.length) {
+            console.log("currentIndex prev", currentIndex);
+            console.log("playlist.length prev", playlist.length);
+            currentIndex --;
+            currentTitle();
+            SC.resolve(playlist[currentIndex]).then(streamTrack).catch(function() {
+               console.log("caught an error when trying to play the previous song.");
+               currentIndex ++;
+               currentTitle();
+            });
+        }
+        else {
+            console.log("Something went wrong...");
+        }
+      });
+      
+    // queued song listener to play song you click on in playlist
+    $(document).on('click', ".queued-song", function(event) {
+        console.log("I was clicked");
+        var targetElement = $(event.target);
+        console.log(targetElement);
+        var indexx = target.index();
+        console.log(target.text());
+        console.log(playlist, indexx);
+});
+
 }();
 
 
