@@ -51,15 +51,17 @@ lazyDj = function () {
             //accessing the selected songs JSON properties to add them to the side menu.
             SC.resolve(ui.item.value).then(function (appendHTML){
                 console.log(appendHTML);
+                 playlist.push(appendHTML);
+                 console.log(playlist);
                 // sending HTML to the side menu
-                $(".playlist").append('<div class="queued-song"><div class="track-playlist"><img class="thumbnail" src='+ appendHTML.artwork_url+'>'+ appendHTML.title+'<a href='+appendHTML.user.permalink_url+ ' target="_blank"><img class=user src ='+ appendHTML.user.avatar_url+' </a></div></div>');
+                $(".playlist").append('<div class="queued-song"><div class="track-playlist"><img class="thumbnail" src='+
+                    appendHTML.artwork_url+'>'+ appendHTML.title+'<a href='+appendHTML.user.permalink_url+ ' target="_blank"><img class=user src ='+
+                    appendHTML.user.avatar_url+' </a></div></div>');
                 $('img').error(function(){ //back img if .artwork_url=null
                     $(this).attr('src', 'http://gfm.fm/assets/img/default-albumart.png');
                 }).then(function (appendHTML){
-                        trackNames.push(appendHTML.title);
+                        trackNames.push(appendHTML.title); //gathering titles to be displayed
                         console.log(trackNames);
-                        
-
                     });
             });
             if (playlist.length == 1) { // play the first song only
@@ -68,7 +70,6 @@ lazyDj = function () {
                     currentIndex = 0;
                     currentTitle();
                     });
-
                 }
              
             return false; // so we won't have the value put in the search box after selected
@@ -99,9 +100,10 @@ lazyDj = function () {
     document.getElementById('next').addEventListener('click', function(){
         console.log("currentIndex next", currentIndex);
         console.log("playlist.length", playlist.length);
+        console.log("play list search", playlist[1].uri, typeof(playlist));
         if (currentIndex < playlist.length) {
             currentIndex ++;
-            currentTitle();
+            
             console.log(playlist[currentIndex]);
             SC.resolve(playlist[currentIndex]).then(streamTrack).catch(function() {
                 console.log("caught error when playing to play next song in playlist.");
