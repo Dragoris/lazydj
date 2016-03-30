@@ -82,6 +82,8 @@ function track(id, uri, title, user, user_uri, art_uri) {
 	this.user = user;
 	this.user_uri = user_uri;
 	this.art_uri = art_uri;
+	//possibly this.get_player = return player obj from SC.stream
+	//instead of tracks proto playing a song
 	this.play = SC.stream('/tracks/' + this.id).then(function(player){
 		currentPlayer = player;
 		player.play();
