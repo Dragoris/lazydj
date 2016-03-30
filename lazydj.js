@@ -182,9 +182,19 @@ document.getElementById('button-previous').addEventListener('click', function(){
       
 // queued song listener to play song you click on in playlist
 $(document).on('click', ".queued-song", function(event) {
-    console.log("I was clicked");
-	console.log("id", this.id);
-	console.log(playlist);
-});
+	var id = this.id;
+	var index;
+	console.log("id ", id);
+	index = playlist.map(function(pTrack) {
+		console.log("pTrack id", pTrack.id);
+		return pTrack.id;
+	}).indexOf(""+id);
+	nextTrack = playlist.filter(function(pTrack){
+		//console.log(pTrack.id)
+		return pTrack.id == id;});
+	//nextTrack[index].play;
+	console.log("index", index);
+	});
+
 $('#title-box').html($('#track-playlist').html());
 
