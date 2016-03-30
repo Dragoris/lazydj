@@ -101,10 +101,10 @@ document.getElementById('play').addEventListener('click', function(){
 document.getElementById('next').addEventListener('click', function(){
     console.log("currentIndex next", currentIndex);
     console.log("playlist.length", playlist.length);
-    console.log("play list search", playlist[1].uri, typeof(playlist));
+    
     if (currentIndex < playlist.length) {
         currentIndex ++;
-        
+        console.log("play list search", playlist[1].uri, typeof(playlist));
         console.log(playlist[currentIndex]);
         SC.resolve(playlist[currentIndex]).then(streamTrack).catch(function() {
             console.log("caught error when playing to play next song in playlist.");

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>LazyDJ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Loading external style sheets -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     
@@ -12,46 +13,54 @@
     <!-- Loading our own style sheet -->
 </head>
 <body>
-    <div id= 'container'>
-        <div id ='header'> 
-             <img id= "logo"src="images/lazy_dj_logo.png">
-            <!-- autocomplete search -->
+    <div id="site-wrapper">
+        <div id= 'header-wrapper'>
+            <div id ='header'> 
+                 <img id= "logo"src="images/lazy_dj_logo.png">
+                <!-- autocomplete search -->
             <div class ="ui-autocomplete">
              <!-- testing search -->
                 <div class="ui-widget">
                   <input id="search" placeholder="Build your playlist">
                 </div>
             </div>    
-            <!-- end of autocomplete search -->  
-           
-            <div id="player">
-                <img id="button-previous" src="images/previous.svg"></img>
-                <img id="button-play" src="images/play.svg"></img>
-                <img id="button-next" src="images/next.svg"></img>
-
+                <!-- end of autocomplete search -->  
+               
+                <div id="player">
+                    <div id="buttons-wrapper">
+                         <img class="button" id ="button-next"src="images/whitenext.svg"></img>
+                        <img class="button" id="button-play" src="images/whiteplay.svg"></img>
+                        <img class="button" id="button-previous"src="images/whiteprevious.svg"></img>
+                    </div>
+                    <div id ="title-box"> </div>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div id="screen"> <!--keeps slider from going into the header -->
-        <!-- Matt's Slide out bar code -->
-        <input id="menu-trigger" type="checkbox"/>
-        <label for="menu-trigger">&#9836</label>
-        <!-- playlist holder -->
-        <header>
-            <ul class="playlist">
-                <div id='inject'>
-                </div>
-            <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="thumbnail" src=code-->
-            </ul>
-        </header>
-        <!-- end of matt's slide out code -->
-    <!-- Boose's Face = canvas -->
-        <canvas id="MainCanvas"></canvas> 
-    </div>
-   
-<link rel="stylesheet" type="text/css" href="lazydj.css">
-<style type="text/css"></style>
-<script type="text/javascript" src="lazydj.js"></script>
-</body>
+        
+        <div id="screen-wrapper"> <!--keeps slider from going into the header -->
+            <!-- Matt's Slide out bar code -->
+                <div class= "toggle-parent">
+                        <div id="toggle-list">
+                            <img id="playlistIcon" src="images/whiteplaylist.svg"></img>
+                        </div>
+                </div>         
+            <div id="offscreen-list">  
+                    <!-- playlist holder -->
+                    <div id="playlist-holder">
+                        <ul class="playlist">
+                            <div id='inject'>
+                            </div>
+                        <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="thumbnail" src=code-->
+                        </ul>
+                    </div>
+            <!-- end of matt's slide out code -->
+        <!-- Boose's Face = canvas -->
+            </div>
+                <canvas id="MainCanvas"></canvas> 
+            </div>
+       </div>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <style type="text/css"></style>
+    <script type="text/javascript" src="lazydj.js"></script>
+    </body>
 </html>

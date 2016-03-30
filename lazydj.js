@@ -1,3 +1,4 @@
+// playlist button logic
 $(function() {
     var listButton = document.getElementById('toggle-list');
     var list = document.getElementById('screen-wrapper');
@@ -12,6 +13,7 @@ $(function() {
     });
 });
 
+// resize canvas
 $(function() {
     var canvas = document.getElementById("MainCanvas");
     var context = canvas.getContext("2d");
@@ -38,50 +40,8 @@ $(function() {
     }
     
 });
-/*$(function() {
 
-    function ScaleImage(srcwidth, srcheight, targetwidth, targetheight, fLetterBox) {
-
-        var result = { width: 0, height: 0, fScaleToTargetWidth: true };
-
-        if ((srcwidth <= 0) || (srcheight <= 0) || (targetwidth <= 0) || (targetheight <= 0)) {
-            return result;
-        }
-
-        // scale to the target width
-        var scaleX1 = targetwidth;
-        var scaleY1 = (srcheight * targetwidth) / srcwidth;
-
-        // scale to the target height
-        var scaleX2 = (srcwidth * targetheight) / srcheight;
-        var scaleY2 = targetheight;
-
-        // now figure out which one we should use
-        var fScaleOnWidth = (scaleX2 > targetwidth);
-        if (fScaleOnWidth) {
-            fScaleOnWidth = fLetterBox;
-        }
-        else {
-           fScaleOnWidth = !fLetterBox;
-        }
-
-        if (fScaleOnWidth) {
-            result.width = Math.floor(scaleX1);
-            result.height = Math.floor(scaleY1);
-            result.fScaleToTargetWidth = true;
-        }
-        else {
-            result.width = Math.floor(scaleX2);
-            result.height = Math.floor(scaleY2);
-            result.fScaleToTargetWidth = false;
-        }
-        result.targetleft = Math.floor((targetwidth - result.width) / 2);
-        result.targettop = Math.floor((targetheight - result.height) / 2);
-
-        return result;
-    }
-});
-*/
+// draw canvas
 $(function() {
 var imageObj = new Image();
 imageObj.onload = function () {
@@ -92,8 +52,9 @@ imageObj.onload = function () {
     context.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
 };
 });
-// globals for tracks and playlists.
-var tracks, playlist = [];
+
+// globals for playlist
+var playlist = [];
 
 // stream track plus some globals to help out
 var currentPlayer, isPlaying, currentIndex;
@@ -113,6 +74,26 @@ SC.initialize({
     client_id: 'b11dd654670362e6d5b12263d9f51b78'
 });
 
+// prototype for a track object
+function track(id, uri, title, user, user_uri, art_uri) {
+	this.id = id;
+	this.uri = uri;
+	this.title = title;
+	this.user = user;
+	this.user_uri = user_uri;
+	this.art_uri = art_uri;
+	this.play = function(track){
+		return SC.stream('/tracks/' + track.id).then(function(player){
+		  currentPlayer = player;
+		  player.play();
+		  isPlaying = 1;
+		  console.log("streamTrack");
+		}).catch(function(){
+		  console.log(arguments);
+		}); //end of return
+	};
+}
+
 // autocomplete thingy
 $("#search").autocomplete({
     source: function (request, response) {
@@ -120,22 +101,18 @@ $("#search").autocomplete({
             //clean out the display_results array. to be shown to the user by autocomplete.
             var display_results = [];
             console.log(songs);
-            for (var i = 0; i < songs.length; i++) {
-                var songObj = songs[i];
-                var index = i.toString() + " ";
-                var uri = " " + songObj.uri;
-                if(songObj.streamable) {
-                    display_results.push({
-                        label: songObj.title,
-                        value: index + songObj.id + uri
-                    });
-                }
-                else {
-                    songs.splice(i,1);
-                }
-            } // end of for loop
-            tracks = songs;
-            //console.log("track", tracks);
+			for each (song in songs) {
+				if(song.streamable) {
+					display_results.push({
+						label: song.title,
+						value: song.uri
+					})
+				}
+				else {
+					console.log("index of splice", songs.indexOf(song)
+					songs.splice(songs.indexOf(song),1)
+				}
+			}
             response(display_results);
         }).catch(function() {
             console.log("failed search", arguments);
@@ -144,16 +121,10 @@ $("#search").autocomplete({
     maxResults: 10,
     minLength: 3, //min input length needed to fire source anon func
     // select is run when user selects a link
-    select: function (event, ui) {
-        // ui variable is from the jquery autocomplete spec. We know it will have
-        // the value of the item selected in the drop down list.
-        // we are using the ui string variable to have 3 numbers.
-        // to extract the meaningful numbers we are spliting the sting.
-        var split = ui.item.value.split(" ");
-        console.log(ui.item.value);
-        var songIndex = split[0];
-        var sondID = split[1];
-        var songUri = split[2];
+    select: function (event, ui) {        
+        var songUri = ui.item.value;
+		console.log(songUri);
+		// create a new track prototype object
         // add selected song to playlist array
         playlist.push(songUri);
         // play the first song only
