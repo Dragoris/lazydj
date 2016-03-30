@@ -63,7 +63,7 @@ var streamTrack = function(track){
       currentPlayer = player;
       player.play();
       isPlaying = 1;
-      console.log("streamTrack");
+	  console.log("streamTrack");
     }).catch(function(){
       console.log(arguments);
     }); //end of return
@@ -82,38 +82,29 @@ function track(id, uri, title, user, user_uri, art_uri) {
 	this.user = user;
 	this.user_uri = user_uri;
 	this.art_uri = art_uri;
-	this.play = function(track){
-		return SC.stream('/tracks/' + track.id).then(function(player){
-		  currentPlayer = player;
-		  player.play();
-		  isPlaying = 1;
-		  console.log("streamTrack");
-		}).catch(function(){
-		  console.log(arguments);
-		}); //end of return
-	};
+	this.play = SC.stream('/tracks/' + this.id).then(function(player){
+		currentPlayer = player;
+		player.play();
+		isPlaying = 1;
+		console.log("track play");
+		console.log(player);
+    }).catch(function(){
+		console.log(arguments);
+    });
 }
 
 // autocomplete thingy
 $("#search").autocomplete({
     source: function (request, response) {
-        SC.get('/tracks', {q: request.term}).then(function (songs) {
-            //clean out the display_results array. to be shown to the user by autocomplete.
-            var display_results = [];
-            console.log(songs);
-			for each (song in songs) {
-				if(song.streamable) {
-					display_results.push({
-						label: song.title,
-						value: song.uri
-					})
-				}
-				else {
-					console.log("index of splice", songs.indexOf(song)
-					songs.splice(songs.indexOf(song),1)
-				}
-			}
-            response(display_results);
+        SC.get('/tracks', {q: request.term}).then(function (results) {
+            //filtering results to only get streamable results
+            results = results.filter(function(formatedResults){
+                return formatedResults.streamable;
+            //chaining methods to format filtered results and return a new array
+            }).map(function(formatedResults){
+                return {label: formatedResults.title, value: formatedResults.uri}; // whats sent when a song is selected
+            });
+            response(results); //list of songs presented to user
         }).catch(function() {
             console.log("failed search", arguments);
         });
@@ -121,20 +112,16 @@ $("#search").autocomplete({
     maxResults: 10,
     minLength: 3, //min input length needed to fire source anon func
     // select is run when user selects a link
-    select: function (event, ui) {        
-        var songUri = ui.item.value;
-		console.log(songUri);
-		// create a new track prototype object
-        // add selected song to playlist array
-        playlist.push(songUri);
-        // play the first song only
-        if (playlist.length == 1) {
-            SC.resolve(songUri).then(streamTrack).catch(function(){
-                console.log("error playing 1 track in playlist");
-            });
-            currentIndex = 0;
-        }
-        $(".playlist").append('<div class="queued-song"><li class="track-playlist"><img class="thumbnail" src='+tracks[songIndex].artwork_url+'>'+tracks[songIndex].title+'</li></div>');
+    select: function (event, ui) { 
+		SC.resolve(ui.item.value).then(function(result){
+			console.log("result", result);
+			playlist.push(new track(result.id, result.uri, result.title, result.user.username, result.user.uri, result.artwork_url));
+		    if (playlist.length == 1) {
+				console.log("playlist length = 1")
+				playlist[0].play
+			}
+			$(".playlist").append('<div class="queued-song" id="'+result.id+'"><li class="track-playlist"><img class="thumbnail" src='+result.artwork_url+'>'+result.title+'</li></div>');
+		});
         return false; // so we won't have the value put in the search box after selected
     },
     open: function () {
@@ -143,7 +130,6 @@ $("#search").autocomplete({
     close: function() {
         $(this).removeClass("ui-corner-top").addClass("ui-corner-all");
     }
-
 });
 // end of autocomplete
 
@@ -190,18 +176,15 @@ document.getElementById('button-previous').addEventListener('click', function(){
             });
         }
         else {
-            console.log("Something went wrong...");
+            console.log("no previous song to play");
         }
       });
       
 // queued song listener to play song you click on in playlist
 $(document).on('click', ".queued-song", function(event) {
     console.log("I was clicked");
-    var targetElement = $(event.target);
-    console.log(targetElement);
-    var indexx = target.index();
-    console.log(target.text());
-    console.log(playlist, indexx);
+	console.log("id", this.id);
+	console.log(playlist);
 });
 $('#title-box').html($('#track-playlist').html());
 
