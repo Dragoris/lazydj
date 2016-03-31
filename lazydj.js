@@ -90,7 +90,7 @@ track.prototype.play = function(){
         currentPlayer = player;
         this.player = player;
         player.play();
-        isPlaying = 1;
+        isPlaying = true;
     }).catch(function(){
         console.log(arguments);
     });
@@ -139,14 +139,14 @@ $("#search").autocomplete({
 
 // play and pause button
 document.getElementById('button-play').addEventListener('click', function(){
-        if (currentPlayer && isPlaying == 1) {
+        if (currentPlayer && isPlaying) {
             console.log("paused clicked");
             currentPlayer.pause();
-            isPlaying = 0;
+            isPlaying = false;
         }
-        else if (currentPlayer && isPlaying == 0) {
+        else if (currentPlayer && !isPlaying) {
             currentPlayer.play();
-            isPlaying = 1;
+            isPlaying = true;
         }
       });
 
