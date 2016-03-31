@@ -82,16 +82,17 @@ function track(id, uri, title, user, user_uri, art_uri) {
 	this.user = user;
 	this.user_uri = user_uri;
 	this.art_uri = art_uri;
-	//possibly this.get_player = return player obj from SC.stream
-	//instead of tracks proto playing a song
-	this.play = SC.stream('/tracks/' + this.id).then(function(player){
-		currentPlayer = player;
-		player.play();
-		isPlaying = 1;
-		console.log("track play");
-		console.log(player);
+    this.player;
+}
+
+track.prototype.play = function(){
+    SC.stream('/tracks/' + this.id).then(function(player){
+        currentPlayer = player;
+        this.player = player;
+        player.play();
+        isPlaying = 1;
     }).catch(function(){
-		console.log(arguments);
+        console.log(arguments);
     });
 }
 
@@ -119,10 +120,11 @@ $("#search").autocomplete({
 			console.log("result", result);
 			playlist.push(new track(result.id, result.uri, result.title, result.user.username, result.user.uri, result.artwork_url));
 		    if (playlist.length == 1) {
-				console.log("playlist length = 1")
-				playlist[0].play
+				playlist[0].play();
 			}
-			$(".playlist").append('<div class="queued-song" id="'+result.id+'"><li class="track-playlist"><img class="thumbnail" src='+result.artwork_url+'>'+result.title+'</li></div>');
+			$(".playlist").append('<div class="queued-song" id="'+result.id
+            +'"><li class="track-playlist"><img class="thumbnail" src='+result.artwork_url
+            +'>'+result.title+'</li></div>');
 		});
         return false; // so we won't have the value put in the search box after selected
     },
@@ -184,19 +186,9 @@ document.getElementById('button-previous').addEventListener('click', function(){
       
 // queued song listener to play song you click on in playlist
 $(document).on('click', ".queued-song", function(event) {
-	var id = this.id;
-	var index;
-	console.log("id ", id);
-	index = playlist.map(function(pTrack) {
-		console.log("pTrack id", pTrack.id);
-		return pTrack.id;
-	}).indexOf(""+id);
-	nextTrack = playlist.filter(function(pTrack){
-		//console.log(pTrack.id)
-		return pTrack.id == id;});
-	//nextTrack[index].play;
-	console.log("index", index);
-	});
-
-$('#title-box').html($('#track-playlist').html());
-
+	var index = playlist.map(function(pTrack) {
+		console.log("pTrack id", pTrack);
+		return pTrack.id.toString();
+	}).indexOf(this.id);
+    playlist[index].play();
+});
