@@ -53,26 +53,29 @@ imageObj.onload = function () {
 };
 });
 
-// globals for playlist
+// global for playlist
 var playlist = [];
-
-// stream track plus some globals to help out
-var currentPlayer, isPlaying, currentIndex;
-var streamTrack = function(track){
-    return SC.stream('/tracks/' + track.id).then(function(player){
-      currentPlayer = player;
-      player.play();
-      isPlaying = 1;
-	  console.log("streamTrack");
-    }).catch(function(){
-      console.log(arguments);
-    }); //end of return
-};
 
 // initializing soundcloud (SC object)
 SC.initialize({
     client_id: 'b11dd654670362e6d5b12263d9f51b78'
 });
+
+// get index of current track playing
+function get_playing() {
+    var index = playlist.map(function(pTrack) {
+		return pTrack.is_playing;
+	}).indexOf(true);
+    return index;
+}
+
+// get index of current track that is paused
+function get_paused() {
+    var index = playlist.map(function(pTrack) {
+		return pTrack.is_paused;
+	}).indexOf(true);
+    return index;
+}
 
 // prototype for a track object
 function track(id, uri, title, user, user_uri, art_uri) {
@@ -82,15 +85,24 @@ function track(id, uri, title, user, user_uri, art_uri) {
 	this.user = user;
 	this.user_uri = user_uri;
 	this.art_uri = art_uri;
+    this.is_playing = false;
+    this.is_paused = false;
     this.player;
 }
 
 track.prototype.play = function(){
+    
+    // TODO: fix this to work with same track more than once in playlist
+    // index of track calling play
+    var index = playlist.map(function(pTrack) {
+		return pTrack.id;
+	}).indexOf(this.id);
+    
+    // stream track and set the playing track's attributes
     SC.stream('/tracks/' + this.id).then(function(player){
-        currentPlayer = player;
-        this.player = player;
+        playlist[index].player = player;
         player.play();
-        isPlaying = true;
+        playlist[index].is_playing = true;
     }).catch(function(){
         console.log(arguments);
     });
@@ -105,9 +117,9 @@ $("#search").autocomplete({
                 return formatedResults.streamable;
             //chaining methods to format filtered results and return a new array
             }).map(function(formatedResults){
-                return {label: formatedResults.title, value: formatedResults.uri}; // whats sent when a song is selected
+                return {label: formatedResults.title, value: formatedResults.uri}; // whats sent when a track is selected
             });
-            response(results); //list of songs presented to user
+            response(results); //list of tracks presented to user
         }).catch(function() {
             console.log("failed search", arguments);
         });
@@ -117,10 +129,10 @@ $("#search").autocomplete({
     // select is run when user selects a link
     select: function (event, ui) { 
 		SC.resolve(ui.item.value).then(function(result){
-			console.log("result", result);
+			//console.log("result", result);
 			playlist.push(new track(result.id, result.uri, result.title, result.user.username, result.user.uri, result.artwork_url));
 		    if (playlist.length == 1) {
-				playlist[0].play();
+				playlist[0].play(); // we know its the first track so use 0
 			}
 			$(".playlist").append('<div class="queued-song" id="'+result.id
             +'"><li class="track-playlist"><img class="thumbnail" src='+result.artwork_url
@@ -139,55 +151,63 @@ $("#search").autocomplete({
 
 // play and pause button
 document.getElementById('button-play').addEventListener('click', function(){
-        if (currentPlayer && isPlaying) {
-            console.log("paused clicked");
-            currentPlayer.pause();
-            isPlaying = false;
-        }
-        else if (currentPlayer && !isPlaying) {
-            currentPlayer.play();
-            isPlaying = true;
-        }
-      });
+    var index = get_playing();
+    // if there are no tracks playing maybe one is paused. try looking for a paused track.
+    if(index === -1) {
+        index = get_paused();
+    }
+    
+    var track = playlist[index];
+    
+    if (track.player && track.is_playing) {
+        track.player.pause();
+        track.is_playing = false;
+        track.is_paused = true;
+    }
+    else if (track.player && track.is_paused) {
+        track.player.play();
+        track.is_playing = true;
+        track.is_paused = false;
+    }
+});
 
 // next button
 document.getElementById('button-next').addEventListener('click', function(){
-        console.log("currentIndex next", currentIndex);
-        console.log("playlist.length", playlist.length);
-        if (currentIndex < playlist.length) {
-            currentIndex ++;
-            console.log(playlist[currentIndex]);
-            SC.resolve(playlist[currentIndex]).then(streamTrack).catch(function() {
-                console.log("caught error when playing to play next song in playlist.");
-                currentIndex --;
-            });
-            
-        }
-        else {
-            console.log("No songs next in playlist");
-        }
-      });
+    var index = get_playing();
+    var next_index = index + 1;
+
+    console.log("next index is_playing", index);
+    console.log("next playlist_length", playlist.length);
+
+    if (index <= playlist.length - 1) {
+        playlist[index].is_playing = false;
+        console.log("palylist", playlist);
+        playlist[next_index].play();
+    }
+    else {
+        console.log("no track next in playlist");
+    }
+});
       
 // previous button
 document.getElementById('button-previous').addEventListener('click', function(){
-        if (playlist.length >= 2 && currentIndex < playlist.length) {
-            console.log("currentIndex prev", currentIndex);
-            console.log("playlist.length prev", playlist.length);
-            currentIndex --;
-            SC.resolve(playlist[currentIndex]).then(streamTrack).catch(function() {
-               console.log("caught an error when trying to play the previous song.");
-               currentIndex ++;
-            });
-        }
-        else {
-            console.log("no previous song to play");
-        }
-      });
+    var index = get_playing();
+    var prev_index = index - 1;
+
+    if (playlist.length >= 2 && index < playlist.length) {
+        console.log("prev index is_playing", index);
+        console.log("prev playlist_length", playlist.length);
+        playlist[index].is_playing = false;
+        playlist[prev_index].play();
+    }
+    else {
+        console.log("no previous track to play");
+    }
+});
       
-// queued song listener to play song you click on in playlist
+// queued song listener to play track you click on in the playlist
 $(document).on('click', ".queued-song", function(event) {
 	var index = playlist.map(function(pTrack) {
-		console.log("pTrack id", pTrack);
 		return pTrack.id.toString();
 	}).indexOf(this.id);
     playlist[index].play();
