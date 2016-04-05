@@ -31,16 +31,20 @@ SC.initialize({
 var globalPlayer, isPlaying, currentIndex, titleIndex;
 var playlist = [];
 
+events.on('Next Clicked', playSong);
 events.on('Play Song', playSong);
 function playSong (JSONsong){
-    return SC.stream('/tracks/' + JSONsong.id).then(function(player){
-      player.play();
-      globalPlayer = player;
-      isPlaying = true;
-      var IndexOfPlaying= playlist.map(function(tracks){
+    var IndexOfPlaying= playlist.map(function(tracks){
         return tracks.id;
-      }).indexOf(JSONsong.id);
-       events.emit('Current Song', IndexOfPlaying);
+    }).indexOf(JSONsong.id);
+
+    return SC.stream('/tracks/' + playlist[IndexOfPlaying].id).then(function(player){
+        player.play();
+        globalPlayer = player;
+        isPlaying = true;
+        console.log(playlist[IndexOfPlaying].id);
+        events.emit('Current Song', playlist[IndexOfPlaying].id);
+      
     }); //end of return
 }
 
@@ -106,43 +110,35 @@ $("#search").autocomplete({
  
 
 // play and pause button
-document.getElementById('play').addEventListener('click', function(){
+$('#play').click(function(){
     if (globalPlayer && isPlaying) {
         console.log("paused clicked");
         globalPlayer.pause();
         isPlaying = false;
-    }
-    else if (globalPlayer && !isPlaying) {
+    }else if (globalPlayer && !isPlaying) {
         console.log("play clicked");
         globalPlayer.play();
         isPlaying = true;
     }
-  });
+
+});
 
 
 // next button
-document.getElementById('next').addEventListener('click', function(){
-    console.log("currentIndex next", currentIndex);
-    console.log("playlist.length", playlist.length);
-    console.log("play list search", playlist[1].uri, typeof(playlist));
-    if (currentIndex < playlist.length) {
-        currentIndex ++;
-        
-        console.log(playlist[currentIndex]);
-        SC.resolve(playlist[currentIndex]).then(streamTrack).catch(function() {
-            console.log("caught error when playing to play next song in playlist.");
-            currentIndex --;
-
-        });
-        
-    }
+$('#next').click(function(){
+    console.log("playlist.length", IndexOfPlaying, playlist.length);
+    if (IndexOfPlaying < playlist.length) {
+        IndexOfPlaying ++;
+        events.emit('Next Clicked', playlist[IndexOfPlaying]);
+        }
+    
     else {
         console.log("No songs next in playlist");
     }
   });
   
 // previous button
-document.getElementById('last').addEventListener('click', function(){
+$('#last').click(function(){
     if (playlist.length >= 2 && currentIndex < playlist.length) {
         console.log("currentIndex prev", currentIndex);
         console.log("playlist.length prev", playlist.length);
