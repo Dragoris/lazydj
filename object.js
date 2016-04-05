@@ -93,7 +93,6 @@ $("#search").autocomplete({
                 console.log(events.events);
                 if(playlist.length === 1){
                     events.emit('Play Song', JSONsong);
-                    console.log('play song');
                 }
             });
              

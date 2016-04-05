@@ -72,7 +72,6 @@ track.prototype.play = function(){
     SC.stream('/tracks/' + this.id).then(function(player){
         playlist[index].player = player;
         var currentSong= playlist[index];
-        console.log(currentSong);
         player.play();
         playlist[index].is_playing = true;
         events.emit('Current Song', currentSong);
