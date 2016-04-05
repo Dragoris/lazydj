@@ -77,6 +77,13 @@ function get_paused() {
     return index;
 }
 
+function index_of(id) {
+    var index = playlist.map(function(pTrack) {
+		return pTrack.id;
+	}).indexOf(id);
+    return index;
+}
+
 // prototype for a track object
 function track(id, uri, title, user, user_uri, art_uri) {
 	this.id = id;
@@ -94,9 +101,7 @@ track.prototype.play = function(){
     
     // TODO: fix this to work with same track more than once in playlist
     // index of track calling play
-    var index = playlist.map(function(pTrack) {
-		return pTrack.id;
-	}).indexOf(this.id);
+    var index = index_of(this.id);
     
     // stream track and set the playing track's attributes
     SC.stream('/tracks/' + this.id).then(function(player){
@@ -179,7 +184,7 @@ document.getElementById('button-next').addEventListener('click', function(){
     console.log("next index is_playing", index);
     console.log("next playlist_length", playlist.length);
 
-    if (index <= playlist.length - 1) {
+    if (next_index < playlist.length) {
         playlist[index].is_playing = false;
         console.log("palylist", playlist);
         playlist[next_index].play();
@@ -194,7 +199,7 @@ document.getElementById('button-previous').addEventListener('click', function(){
     var index = get_playing();
     var prev_index = index - 1;
 
-    if (playlist.length >= 2 && index < playlist.length) {
+    if (prev_index >= 0) {
         console.log("prev index is_playing", index);
         console.log("prev playlist_length", playlist.length);
         playlist[index].is_playing = false;
@@ -207,8 +212,5 @@ document.getElementById('button-previous').addEventListener('click', function(){
       
 // queued song listener to play track you click on in the playlist
 $(document).on('click', ".queued-song", function(event) {
-	var index = playlist.map(function(pTrack) {
-		return pTrack.id.toString();
-	}).indexOf(this.id);
-    playlist[index].play();
+    playlist[index_of(parseInt(this.id))].play();
 });
