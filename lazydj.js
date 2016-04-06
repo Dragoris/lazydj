@@ -77,6 +77,7 @@ function get_paused() {
     return index;
 }
 
+// TODO: fix this to work with same track more than once in playlist
 function index_of(id) {
     var index = playlist.map(function(pTrack) {
 		return pTrack.id;
@@ -99,7 +100,6 @@ function track(id, uri, title, user, user_uri, art_uri) {
 
 track.prototype.play = function(){
     
-    // TODO: fix this to work with same track more than once in playlist
     // index of track calling play
     var index = index_of(this.id);
     
