@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>LazyDJ</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Loading external style sheets -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -19,7 +20,7 @@
                  <img id= "logo"src="images/lazy_dj_logo.png">
                 <!-- autocomplete search -->
             <div class ="ui-autocomplete">
-             <!-- testing search -->
+             <!-- search -->
                 <div class="ui-widget">
                   <input id="search" placeholder="Build your playlist">
                 </div>
@@ -28,7 +29,7 @@
                
                 <div id="player">
                     <div id="buttons-wrapper">
-                         <img class="button" id="last"src="images/whitelast.svg"></img>
+                         <img class="button" id="previous"src="images/whitelast.svg"></img>
                         <img class="button" id="play" src="images/whiteplay.svg"></img>
                         <img class="button" id ="next"src="images/whitenext.svg"></img>
                     </div>
@@ -50,7 +51,7 @@
                         <ul class="playlist">
                             <div id='inject'>
                             </div>
-                        <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="thumbnail" src=code-->
+                        <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="album-art" src=code-->
                         </ul>
                     </div>
             <!-- end of matt's slide out code -->
@@ -61,6 +62,6 @@
        </div>
     <link rel="stylesheet" type="text/css" href="header.css">
     <style type="text/css"></style>
-    <script type="text/javascript" src="object.js"></script>
+    <script type="text/javascript" src="merge.js"></script>
     </body>
 </html>
