@@ -30,15 +30,15 @@ lazyDj = function () {
     // autocomplete
     $("#search").autocomplete({
         source: function (request, response) {
-            SC.get('/tracks', {q: request.term}).then(function (songs) {
-                //filtering results to only get streamable songs
-                songs = songs.filter(function(streamCheck){
-                    return streamCheck.streamable;
-                //chaining methods to format filtered songs and return a new array
-                }).map(function(streamCheck){
-                    return {label: streamCheck.title, value: streamCheck.uri}; // whats sent when a song is selected
+            SC.get('/tracks', {q: request.term}).then(function (results) {
+                //filtering results to only get streamable results
+                results = results.filter(function(formatedResults){
+                    return formatedResults.streamable;
+                //chaining methods to format filtered results and return a new array
+                }).map(function(formatedResults){
+                    return {label: formatedResults.title, value: formatedResults.uri}; // whats sent when a song is selected
                 });
-                response(songs); //list of songs presented to user
+                response(results); //list of songs presented to user
             });
         },
         maxResults: 10,
@@ -46,21 +46,19 @@ lazyDj = function () {
         select: function (event, ui) {
             // ui variable is from the jquery autocomplete spec. We know it will have
             // the lable and value returned in source:.
-            playlist.push(ui.item.value);
-            console.log(playlist); // add selected song to the paylist
             //accessing the selected songs JSON properties to add them to the side menu.
-            SC.resolve(ui.item.value).then(function (appendHTML){
-                console.log(appendHTML);
-                 playlist.push(appendHTML);
+            SC.resolve(ui.item.value).then(function (JSONsong){
+                console.log(JSONsong);
+                 playlist.push(JSONsong);
                  console.log(playlist);
                 // sending HTML to the side menu
                 $(".playlist").append('<div class="queued-song"><div class="track-playlist"><img class="thumbnail" src='+
-                    appendHTML.artwork_url+'>'+ appendHTML.title+'<a href='+appendHTML.user.permalink_url+ ' target="_blank"><img class=user src ='+
-                    appendHTML.user.avatar_url+' </a></div></div>');
+                    JSONsong.artwork_url+'>'+ JSONsong.title+'<a href='+JSONsong.user.permalink_url+ ' target="_blank"><img class=user src ='+
+                    JSONsong.user.avatar_url+' </a></div></div>');
                 $('img').error(function(){ //back img if .artwork_url=null
                     $(this).attr('src', 'http://gfm.fm/assets/img/default-albumart.png');
-                }).then(function (appendHTML){
-                        trackNames.push(appendHTML.title); //gathering titles to be displayed
+                }).then(function (JSONsong){
+                        trackNames.push(JSONsong.title); //gathering titles to be displayed
                         console.log(trackNames);
                     });
             });

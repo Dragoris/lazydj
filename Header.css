@@ -62,9 +62,12 @@ background-color: blue;
     display: flex;
     justify-content: space-between;
     flex-flow: row nowrap;
-    background-color: #000000;
+    background-color: #000;
     font-family: arial;
     width: 100%;
+    border-top: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    overflow-x: hidden;
     /* loading li's sliding into place*/
     -webkit-animation: playlist-animation .5s ease forwards ;
     -moz-animation: playlist-animation .5s ease forwards;
@@ -72,31 +75,28 @@ background-color: blue;
         animation: playlist-animation .5s ease forwards;
     
 }
-.queued-song:hover {}
-.album-art { /* album art */
+.album-art {
     flex:1;
-
+    width: 100px;
 }
 .song-title { 
     flex:2;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
+    margin: auto;
+    text-align: center;
+    color: #d5d5d5;
+    background-color: #000;
     padding: 0;
     font-size: 1em;
-
-
+    font-family: Century Gothic;
+    cursor: default;
 }
 .user-avatar{
     flex:1;
     height: 100%;
     overflow: hidden;
+    width: 100px;
 }
-
-.track-playlist:hover{
-    color: black;
-}
+/* End of songs in the playlist's*/
 /* loading li's sliding into place*/
 @-webkit-keyframes playlist-animation { from { transform: translateX(-20vw); } to { transform: translateX(0px); }  }
 @-moz-keyframes playlist-animation { from { transform: translateX(-20vw); } to { transform: translateX(0px); }  }
@@ -109,10 +109,15 @@ canvas{}
 
 #header{
     background: #242424;
-    display: -webkit-flex;
+    display: -ms-flexbox;
+        -ms-flex-wrap: wrap;
+        -ms-flex-direction: column;
+        -webkit-flex-flow: row nowrap; 
+    flex-flow: row nowrap; 
+        display: -webkit-box;
     display: flex;
     padding: 0 2%;
-    -webkit-justify-content: space-around;
+        -webkit-justify-content: space-around;
     justify-content: space-around;
     align-items: center;
 
@@ -159,18 +164,21 @@ canvas{}
     transition: all .1s ease;
 }
 /*displays the current song title*/
-#title-box{
+.title-box{
     border: 2px solid #fff;
     border-radius: 5px;
     margin: 0 .5em .5em .5em;
     color: #fff;
     background-color: #000;
     text-align: center;
+    min-height: 18px;
+    font-family: Century Gothic;
 }
 
 /* search bar */
 .ui-autocomplete-loading {
     background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
+    font-family: Trebuchet MS;
 }
 .ui-autocomplete{ /* search result displayed*/
     display: flex;
@@ -178,6 +186,7 @@ canvas{}
     position: static;
     flex-direction: column;
     align-items: center;
+    font-family: Trebuchet MS;
 }
 .ui-autocomplete-input{ /* search bar */
     display: flex;
@@ -185,6 +194,7 @@ canvas{}
     color: #000000;
     border-style: none;
     outline: none;
+    border: 2px solid #000;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -215,7 +225,7 @@ canvas{}
     #logo{
        flex:.05; 
     } 
-    .ui-autocomplete-input{
+    .ui-autocomplete .ui-widget{
         width: 100%;
     }
     #player{
@@ -228,11 +238,13 @@ canvas{}
     }
     #button-play, #button-next, #button-previous{
         padding: 2%;
-        width: 25%;
-        ;   
+        width: 25%;  
     }
     #toggle-list{
         width: 15%;
         height: 15%;
     }
+    #screen-wrapper.hide-list {
+    -webkit-transform: translateX(60vw);
+    transform: translateX(60vw);
 }

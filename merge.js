@@ -82,21 +82,21 @@ track.prototype.play = function(){
 };
 // rendering html when notified
 events.on('Song Added', renderSideMenu);
-events.on('Current Song', renderTextBox);
+events.on('Current Song', renderTitleBox);
 function renderSideMenu(song){
     console.log('im rendered', song);
     // sending HTML to the side menu
      $(".playlist").append('<div class="queued-song"><img class="album-art" src='+
-        song.artwork_url+'>'+'<div class= "song-title">'+song.title+'</div>'+'<a href ='+song.user.permalink_url+ ' target="_blank"><img class="user-avatar" src ='+
-        song.user.avatar_url+' </a></div>');
+        song.artwork_url+'>'+'<div class= "song-title">'+song.title+'</div>'+'<div class ="user-avatar"> <a href ='+song.user.permalink_url+ ' target="_blank"><img src ='+
+        song.user.avatar_url+' </a></div></div>');
     $('img').error(function(){ //back up img if .artwork_url=null
         $(this).attr('src', 'http://gfm.fm/assets/img/default-albumart.png');
         console.log(this);
     });
 }
-function renderTextBox(currentSong){
-    $("#title-box").text(currentSong.title);
-    console.log('textbox', currentSong.title);
+function renderTitleBox(currentSong){
+    $(".title-box").text(currentSong.title);
+    console.log('titlebox', currentSong.title);
 }
 
 // autocomplete thingy
