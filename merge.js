@@ -100,10 +100,11 @@ function renderTitleBox(currentSong){
     console.log('titlebox', currentSong.title);
 }
 function togglePlayPause(toggle){
-    if (document.getElementById('play-pause').src =="file:///C:/Users/Katelyn/Desktop/GitHub/lazydj/images/whitepause.svg"){
-        document.getElementById('play-pause').src = "file:///C:/Users/Katelyn/Desktop/GitHub/lazydj/images/whiteplay.svg";
+    var file= "file:///C:/Users/Katelyn/Desktop/GitHub/lazydj/images/";
+    if (document.getElementById('play-pause').src ==file +"pause.svg"){
+        document.getElementById('play-pause').src = file +"play.svg";
     }else {
-        document.getElementById('play-pause').src = "file:///C:/Users/Katelyn/Desktop/GitHub/lazydj/images/whitepause.svg";
+        document.getElementById('play-pause').src = file +"pause.svg";
     }
 }
 
