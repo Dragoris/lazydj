@@ -233,7 +233,7 @@ canvas{}
     #buttons{
         flex:1;
     }
-    #button-play, #button-next, #button-previous{
+    #button-play-pause, #button-next, #button-previous{
         padding: 2%;
         width: 25%;  
     }

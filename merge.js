@@ -83,6 +83,7 @@ track.prototype.play = function(){
 // rendering html when notified
 events.on('Song Added', renderSideMenu);
 events.on('Current Song', renderTitleBox);
+events.on('Play-pause', togglePlayPause);
 function renderSideMenu(song){
     console.log('im rendered', song);
     // sending HTML to the side menu
@@ -97,6 +98,13 @@ function renderSideMenu(song){
 function renderTitleBox(currentSong){
     $(".title-box").text(currentSong.title);
     console.log('titlebox', currentSong.title);
+}
+function togglePlayPause(toggle){
+    if (document.getElementById('play-pause').src =="file:///C:/Users/Katelyn/Desktop/GitHub/lazydj/images/whitepause.svg"){
+        document.getElementById('play-pause').src = "file:///C:/Users/Katelyn/Desktop/GitHub/lazydj/images/whiteplay.svg";
+    }else {
+        document.getElementById('play-pause').src = "file:///C:/Users/Katelyn/Desktop/GitHub/lazydj/images/whitepause.svg";
+    }
 }
 
 // autocomplete thingy
@@ -141,8 +149,9 @@ $("#search").autocomplete({
 // end of autocomplete
 
 // play and pause button
-document.getElementById('play').addEventListener('click', function(){
+document.getElementById('play-pause').addEventListener('click', function(){
     var index = get_playing();
+    events.emit("Play-pause");
     // if there are no tracks playing maybe one is paused. try looking for a paused track.
     if(index === -1) {
         index = get_paused();
