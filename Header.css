@@ -15,13 +15,13 @@ background-color: blue;
 
 }
 #offscreen-list{
-    width: 30vw;
+    width: 31vw;
     height: 100%;
     position: absolute;
     top: 0;
     background: #242424;
     z-index: 0;
-    transform: translateX(-30vw);
+    transform: translateX(-31vw);
 }
 .toggle-parent{
     width: 100%;
@@ -34,15 +34,15 @@ background-color: blue;
     height: 7%;
 }
 #screen-wrapper.hide-list {
-    -webkit-transform: translateX(30vw);
-    transform: translateX(30vw);
+    -webkit-transform: translateX(31vw);
+    transform: translateX(31vw);
 }
 #toggle-list.hide-list{
 }
 #playlist-holder{
     overflow: hidden;
     height: 100%;
-    width: 30vw;
+    width: 31vw;
 }
 .playlist { /* Ul containing li's of queued songs*/
     display: flex;
@@ -67,7 +67,6 @@ background-color: blue;
     width: 100%;
     border-top: 2px solid #fff;
     border-bottom: 2px solid #fff;
-    overflow-x: hidden;
     /* loading li's sliding into place*/
     -webkit-animation: playlist-animation .5s ease forwards ;
     -moz-animation: playlist-animation .5s ease forwards;
@@ -77,7 +76,7 @@ background-color: blue;
 }
 .album-art {
     flex:1;
-    width: 100px;
+    width: 100%;
 }
 .song-title { 
     flex:2;
@@ -92,9 +91,9 @@ background-color: blue;
 }
 .user-avatar{
     flex:1;
-    height: 100%;
     overflow: hidden;
-    width: 100px;
+    width: 100%;
+    height: auto;
 }
 /* End of songs in the playlist's*/
 /* loading li's sliding into place*/
@@ -230,8 +229,6 @@ canvas{}
     }
     #player{
         flex:1 auto;
-
-
     }
     #buttons{
         flex:1;
@@ -245,6 +242,15 @@ canvas{}
         height: 15%;
     }
     #screen-wrapper.hide-list {
-    -webkit-transform: translateX(60vw);
-    transform: translateX(60vw);
+    -webkit-transform: translateX(77vw);
+    transform: translateX(77vw);
+    }
+    #offscreen-list{
+        width: 77vw;
+        transform: translateX(-77vw)
+    }
+    .playlist, #playlist-holder,.queued-song{
+        width: 77vw;
+    }
+    
 }
