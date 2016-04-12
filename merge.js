@@ -83,7 +83,7 @@ track.prototype.play = function(){
 // rendering html when notified
 events.on('Song Added', renderSideMenu);
 events.on('Current Song', renderTitleBox);
-events.on('Play-pause', togglePlayPause);
+events.on('Play-Pause Clicked', togglePlayPause);
 function renderSideMenu(song){
     console.log('im rendered', song);
     // sending HTML to the side menu
@@ -151,15 +151,13 @@ $("#search").autocomplete({
 
 // play and pause button
 document.getElementById('play-pause').addEventListener('click', function(){
+    events.emit('Play-Pause Clicked');
     var index = get_playing();
-    events.emit("Play-pause");
     // if there are no tracks playing maybe one is paused. try looking for a paused track.
     if(index === -1) {
         index = get_paused();
     }
-    
     var track = playlist[index];
-    
     if (track.player && track.is_playing) {
         track.player.pause();
         track.is_playing = false;
@@ -175,13 +173,15 @@ document.getElementById('play-pause').addEventListener('click', function(){
 // next button
 document.getElementById('next').addEventListener('click', function(){
     var index = get_playing();
+    if(index === -1) {
+        index = get_paused();
+    }
     var next_index = index + 1;
-
     console.log("next index is_playing", index);
     console.log("next playlist_length", playlist.length);
-
-    if (index <= playlist.length - 1) {
+    if (next_index < playlist.length) {
         playlist[index].is_playing = false;
+        playlist[index].is_paused = false;
         console.log("palylist", playlist);
         playlist[next_index].play();
     }
@@ -193,12 +193,15 @@ document.getElementById('next').addEventListener('click', function(){
 // previous button
 document.getElementById('previous').addEventListener('click', function(){
     var index = get_playing();
+    if(index === -1) {
+        index = get_paused();
+    }
     var prev_index = index - 1;
-
-    if (playlist.length >= 2 && index < playlist.length) {
+    if (prev_index >= 0) {
         console.log("prev index is_playing", index);
         console.log("prev playlist_length", playlist.length);
         playlist[index].is_playing = false;
+        playlist[index].is_paused = false;
         playlist[prev_index].play();
     }
     else {
@@ -208,11 +211,16 @@ document.getElementById('previous').addEventListener('click', function(){
       
 // queued song listener to play track you click on in the playlist
 $(document).on('click', ".queued-song", function(event) {
-	var index = playlist.map(function(pTrack) {
-		return pTrack.id.toString();
-	}).indexOf(this.id);
+    var stopping_song = get_playing();
+    if(stopping_song === -1) {
+        stopping_song = get_paused();
+        playlist[stopping_song].is_paused = false;
+    }
+    playlist[stopping_song].is_playing = false;
+    var index = index_of(parseInt(this.id, radix));
     playlist[index].play();
 });
+
 // playlist button logic
 $(function() {
     var listButton = document.getElementById('toggle-list');

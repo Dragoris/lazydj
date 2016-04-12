@@ -176,7 +176,7 @@ canvas{}
 
 /* search bar */
 .ui-autocomplete-loading {
-    background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
+    background: #fff url("images/ui-anim_basic_16x16.gif") right center no-repeat;
     font-family: Trebuchet MS;
 }
 .ui-autocomplete{ /* search result displayed*/
