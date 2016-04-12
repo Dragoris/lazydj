@@ -64,35 +64,35 @@ SC.initialize({
 // get index of current track playing
 function get_playing() {
     var index = playlist.map(function(pTrack) {
-		return pTrack.is_playing;
-	}).indexOf(true);
+        return pTrack.is_playing;
+    }).indexOf(true);
     return index;
 }
 
 // get index of current track that is paused
 function get_paused() {
     var index = playlist.map(function(pTrack) {
-		return pTrack.is_paused;
-	}).indexOf(true);
+        return pTrack.is_paused;
+    }).indexOf(true);
     return index;
 }
 
 // TODO: fix this to work with same track more than once in playlist
 function index_of(id) {
     var index = playlist.map(function(pTrack) {
-		return pTrack.id;
-	}).indexOf(id);
+        return pTrack.id;
+    }).indexOf(id);
     return index;
 }
 
 // prototype for a track object
 function track(id, uri, title, user, user_uri, art_uri) {
-	this.id = id;
-	this.uri = uri;
-	this.title = title;
-	this.user = user;
-	this.user_uri = user_uri;
-	this.art_uri = art_uri;
+    this.id = id;
+    this.uri = uri;
+    this.title = title;
+    this.user = user;
+    this.user_uri = user_uri;
+    this.art_uri = art_uri;
     this.is_playing = false;
     this.is_paused = false;
     this.player;
@@ -108,17 +108,17 @@ track.prototype.play = function(){
         playlist[index].player = player;
         player.play();
         playlist[index].is_playing = true;
-		
-		// play next song (if there is one) after the current is finished.
-		playlist[index].player.on('finish', function () {
-			console.log("finished a song");
-			var next_index = index + 1;
-			if (next_index < playlist.length) {
-				playlist[index].is_playing = false;
-				console.log("next after finished", playlist);
-				playlist[next_index].play();
-			}
-		});
+        
+        // play next song (if there is one) after the current is finished.
+        playlist[index].player.on('finish', function () {
+            console.log("finished a song");
+            var next_index = index + 1;
+            if (next_index < playlist.length) {
+                playlist[index].is_playing = false;
+                console.log("next after finished", playlist);
+                playlist[next_index].play();
+            }
+        });
     }).catch(function(){
         console.log(arguments);
     });
@@ -144,16 +144,16 @@ $("#search").autocomplete({
     minLength: 3, //min input length needed to fire source anon func
     // select is run when user selects a link
     select: function (event, ui) { 
-		SC.resolve(ui.item.value).then(function(result){
-			//console.log("result", result);
-			playlist.push(new track(result.id, result.uri, result.title, result.user.username, result.user.uri, result.artwork_url));
-		    if (playlist.length == 1) {
-				playlist[0].play(); // we know its the first track so use 0
-			}
-			$(".playlist").append('<div class="queued-song" id="'+result.id
+        SC.resolve(ui.item.value).then(function(result){
+            //console.log("result", result);
+            playlist.push(new track(result.id, result.uri, result.title, result.user.username, result.user.uri, result.artwork_url));
+            if (playlist.length == 1) {
+                playlist[0].play(); // we know its the first track so use 0
+            }
+            $(".playlist").append('<div class="queued-song" id="'+result.id
             +'"><li class="track-playlist"><img class="thumbnail" src='+result.artwork_url
             +'>'+result.title+'</li></div>');
-		});
+        });
         return false; // so we won't have the value put in the search box after selected
     },
     open: function () {
@@ -193,13 +193,13 @@ document.getElementById('button-next').addEventListener('click', function(){
     if(index === -1) {
         index = get_paused();
     }
-	var next_index = index + 1;
+    var next_index = index + 1;
     console.log("next index is_playing", index);
     console.log("next playlist_length", playlist.length);
 
     if (next_index < playlist.length) {
         playlist[index].is_playing = false;
-		playlist[index].is_paused = false;
+        playlist[index].is_paused = false;
         console.log("palylist", playlist);
         playlist[next_index].play();
     }
@@ -214,12 +214,12 @@ document.getElementById('button-previous').addEventListener('click', function(){
     if(index === -1) {
         index = get_paused();
     }
-	var prev_index = index - 1;
+    var prev_index = index - 1;
     if (prev_index >= 0) {
         console.log("prev index is_playing", index);
         console.log("prev playlist_length", playlist.length);
         playlist[index].is_playing = false;
-		playlist[index].is_paused = false;
+        playlist[index].is_paused = false;
         playlist[prev_index].play();
     }
     else {
@@ -229,14 +229,14 @@ document.getElementById('button-previous').addEventListener('click', function(){
       
 // queued song listener to play track you click on in the playlist
 $(document).on('click', ".queued-song", function(event) {
-	var stopping_song = get_playing();
-	
-	if(stopping_song === -1) {
+    var stopping_song = get_playing();
+    
+    if(stopping_song === -1) {
         stopping_song = get_paused();
-		playlist[stopping_song].is_paused = false;
+        playlist[stopping_song].is_paused = false;
     }
-	playlist[stopping_song].is_playing = false;
-	
-	var index = index_of(parseInt(this.id));
+    playlist[stopping_song].is_playing = false;
+    
+    var index = index_of(parseInt(this.id));
     playlist[index].play();
 });
