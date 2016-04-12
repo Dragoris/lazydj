@@ -108,6 +108,17 @@ track.prototype.play = function(){
         playlist[index].player = player;
         player.play();
         playlist[index].is_playing = true;
+		
+		// play next song (if there is one) after the current is finished.
+		playlist[index].player.on('finish', function () {
+			console.log("finished a song");
+			var next_index = index + 1;
+			if (next_index < playlist.length) {
+				playlist[index].is_playing = false;
+				console.log("next after finished", playlist);
+				playlist[next_index].play();
+			}
+		});
     }).catch(function(){
         console.log(arguments);
     });
@@ -218,5 +229,14 @@ document.getElementById('button-previous').addEventListener('click', function(){
       
 // queued song listener to play track you click on in the playlist
 $(document).on('click', ".queued-song", function(event) {
-    playlist[index_of(parseInt(this.id))].play();
+	var stopping_song = get_playing();
+	
+	if(stopping_song === -1) {
+        stopping_song = get_paused();
+		playlist[stopping_song].is_paused = false;
+    }
+	playlist[stopping_song].is_playing = false;
+	
+	var index = index_of(parseInt(this.id));
+    playlist[index].play();
 });
