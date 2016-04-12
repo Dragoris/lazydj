@@ -179,13 +179,16 @@ document.getElementById('button-play').addEventListener('click', function(){
 // next button
 document.getElementById('button-next').addEventListener('click', function(){
     var index = get_playing();
-    var next_index = index + 1;
-
+    if(index === -1) {
+        index = get_paused();
+    }
+	var next_index = index + 1;
     console.log("next index is_playing", index);
     console.log("next playlist_length", playlist.length);
 
     if (next_index < playlist.length) {
         playlist[index].is_playing = false;
+		playlist[index].is_paused = false;
         console.log("palylist", playlist);
         playlist[next_index].play();
     }
@@ -197,12 +200,15 @@ document.getElementById('button-next').addEventListener('click', function(){
 // previous button
 document.getElementById('button-previous').addEventListener('click', function(){
     var index = get_playing();
-    var prev_index = index - 1;
-
+    if(index === -1) {
+        index = get_paused();
+    }
+	var prev_index = index - 1;
     if (prev_index >= 0) {
         console.log("prev index is_playing", index);
         console.log("prev playlist_length", playlist.length);
         playlist[index].is_playing = false;
+		playlist[index].is_paused = false;
         playlist[prev_index].play();
     }
     else {
