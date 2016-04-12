@@ -77,14 +77,6 @@ function get_paused() {
     return index;
 }
 
-// TODO: fix this to work with same track more than once in playlist
-function index_of(id) {
-    var index = playlist.map(function(pTrack) {
-        return pTrack.id;
-    }).indexOf(id);
-    return index;
-}
-
 // prototype for a track object
 function track(id, uri, title, user, user_uri, art_uri) {
     this.id = id;
@@ -101,15 +93,16 @@ function track(id, uri, title, user, user_uri, art_uri) {
 track.prototype.play = function(){
     
     // index of track calling play
-    var index = index_of(this.id);
+    var index = this.index;
+    console.log("play index", this.index);
     
     // stream track and set the playing track's attributes
-    SC.stream('/tracks/' + this.id).then(function(player){
+    SC.stream('/tracks/' + playlist[this.index].id).then(function(player){
         playlist[index].player = player;
         player.play();
         playlist[index].is_playing = true;
         
-        // play next song (if there is one) after the current is finished.
+        // play next song (if there is one) after the current is finished
         playlist[index].player.on('finish', function () {
             console.log("finished a song");
             var next_index = index + 1;
@@ -146,11 +139,13 @@ $("#search").autocomplete({
     select: function (event, ui) { 
         SC.resolve(ui.item.value).then(function(result){
             //console.log("result", result);
-            playlist.push(new track(result.id, result.uri, result.title, result.user.username, result.user.uri, result.artwork_url));
+            selected_track = new track(result.id, result.uri, result.title, result.user.username, result.user.uri, result.artwork_url);
+            playlist.push(selected_track);
+            selected_track.index = playlist.length - 1;
             if (playlist.length == 1) {
                 playlist[0].play(); // we know its the first track so use 0
             }
-            $(".playlist").append('<div class="queued-song" id="'+result.id
+            $(".playlist").append('<div class="queued-song" id="'+selected_track.index
             +'"><li class="track-playlist"><img class="thumbnail" src='+result.artwork_url
             +'>'+result.title+'</li></div>');
         });
@@ -237,6 +232,5 @@ $(document).on('click', ".queued-song", function(event) {
     }
     playlist[stopping_song].is_playing = false;
     
-    var index = index_of(parseInt(this.id));
-    playlist[index].play();
+    playlist[parseInt(this.id)].play();
 });
