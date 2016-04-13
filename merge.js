@@ -63,22 +63,30 @@ function track(id, uri, title, user, user_uri, art_uri, avatar_url, permalink_ur
 }
 
 track.prototype.play = function(){
-    // TODO: fix this to work with same track more than once in playlist
     // index of track calling play
-    var index = playlist.map(function(pTrack) {
-		return pTrack.id;
-	}).indexOf(this.id);
+    var index = this.index;
+    console.log("play index", this.index);
+    
     // stream track and set the playing track's attributes
-    SC.stream('/tracks/' + this.id).then(function(player){
+    SC.stream('/tracks/' + playlist[this.index].id).then(function(player){
         playlist[index].player = player;
-        var currentSong= playlist[index];
+        player.seek(0);
         player.play();
         playlist[index].is_playing = true;
-        events.emit('Current Song', currentSong);
+        
+        // play next song (if there is one) after the current is finished
+        playlist[index].player.on('finish', function () {
+            console.log("finished a song");
+            var next_index = index + 1;
+            if (next_index < playlist.length) {
+                playlist[index].is_playing = false;
+                console.log("next after finished", playlist);
+                playlist[next_index].play();
+            }
+        });
     }).catch(function(){
         console.log(arguments);
     });
-    
 };
 // rendering html when notified
 events.on('Song Added', renderSideMenu);
@@ -87,9 +95,11 @@ events.on('Play-Pause Clicked', togglePlayPause);
 function renderSideMenu(song){
     console.log('im rendered', song);
     // sending HTML to the side menu
-     $(".playlist").append('<div class="queued-song"><img class="album-art" src='+
-        song.artwork_url+'>'+'<div class= "song-title">'+song.title+'</div>'+'<div> <a href ='+song.user.permalink_url+ ' target="_blank"><img class ="user-avatar" src ='+
-        song.user.avatar_url+' </a></div></div>');
+     $(".playlist").append('<div class="queued-song" id ='+song.index+'><img class="album-art" src='+
+        song.artwork_url+'>'+'<div class= "song-title">'+
+        song.title+'</div>'+'<div class ="user-avatar"> <a href ='+
+        song.permalink_url+ ' target="_blank"><img src ='+
+        song.avatar_url+' </a><div class ="user-name"> Upladed by: '+song.username+ '</div></div>');
     $('img').error(function(){ //back up img if .artwork_url=null
         $(this).attr('src', 'http://gfm.fm/assets/img/default-albumart.png');
         console.log(this);
@@ -128,11 +138,13 @@ $("#search").autocomplete({
     minLength: 3, //min input length needed to fire source anon func
     // select is run when user selects a link
     select: function (event, ui) {
-        SC.resolve(ui.item.value).then(function (song){
-			console.log("song", song);
+        SC.resolve(ui.item.value).then(function (JSONsong){
+            var song = new track(JSONsong.id, JSONsong.uri, JSONsong.title, JSONsong.user.username, JSONsong.user.uri,
+                JSONsong.artwork_url, JSONsong.user.avatar_url, JSONsong.user.permalink_url);
+            playlist.push(song);
+            console.log("song", song);
+            song.index= playlist.length -1;
             events.emit('Song Added', song);
-            var song = new track(song.id, song.uri, song.title, song.user.username, song.user.uri, song.artwork_url, song.user.avatar_url, song.user.permalink_url);
-			playlist.push(song);
                 if (playlist.length == 1) {
 				playlist[0].play(); // we know its the first track so use 0
                 
@@ -210,7 +222,7 @@ document.getElementById('previous').addEventListener('click', function(){
 });
       
 // queued song listener to play track you click on in the playlist
-$(document).on('click', ".queued-song", function(event) {
+/*$(document).on('click', ".queued-song", function(event) {
     var stopping_song = get_playing();
     if(stopping_song === -1) {
         stopping_song = get_paused();
@@ -219,6 +231,16 @@ $(document).on('click', ".queued-song", function(event) {
     playlist[stopping_song].is_playing = false;
     var index = index_of(parseInt(this.id, radix));
     playlist[index].play();
+});*/
+$(document).on('click', ".queued-song", function(event) {
+    var stopping_song = get_playing();
+    if(stopping_song === -1) {
+        stopping_song = get_paused();
+        playlist[stopping_song].is_paused = false;
+    }
+    playlist[stopping_song].is_playing = false;
+    
+    playlist[parseInt(this.id)].play();
 });
 
 // playlist button logic
