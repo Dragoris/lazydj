@@ -135,9 +135,10 @@ a .user-name{
     @keyframes playlist-animation { from { transform: translateX(-20vw); } to { transform: translateX(0px); }  }
 
 /* End of Side Sliding Menu */
-
-canvas{}
-
+/*full screen resizeable images*/
+#Main{
+    max-width: 100%;
+}
 #header{
     background: #00695c;
     display: -ms-flexbox;

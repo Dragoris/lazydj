@@ -89,9 +89,11 @@ track.prototype.play = function(){
     });
 };
 // rendering html when notified
-events.on('Song Added', renderSideMenu);
-events.on('Current Song', renderTitleBox);
-events.on('Play-Pause Clicked', togglePlayPause);
+events.on('SongAdded', renderSideMenu);
+events.on('CurrentSong', renderTitleBox);
+events.on('PlayPauseClicked', togglePlayPause);
+events.on('SongAdded', renderimage);
+events.on('SongPlaying', renderimage);
 function renderSideMenu(song){
     console.log('im rendered', song);
     // sending HTML to the side menu
@@ -117,7 +119,26 @@ function togglePlayPause(toggle){
         document.getElementById('play-pause').src = file +"pause.svg";
     }
 }
+function renderimage(change){
+    var file= "file:///C:/Users/Katelyn/Desktop/GitHub/lazydj/images/Backgrounds/";
+    var backgoundImages = [file+'1.jpg', file+'2.jpg', file+'3.jpg', file+'4.jpg', file+'5.jpg',
+     file+'6.jpg', file+'7.jpg', file+'8.jpg', file+'9.jpg'];
+    var imageIndex = 0;
+    function cycleImage(){
+        console.log('im cycling', backgoundImages[imageIndex]);
+        console.log(events.events, events.events.SongPlaying.length);
+        document.getElementById('Main').setAttribute("src", backgoundImages[imageIndex]);
+        imageIndex = (imageIndex + 1) % backgoundImages.length;
+        if(events.events.SongPlaying.length===0){
+            console.log('paused');
+            clearInterval(cycling);
+        }
 
+    }
+        console.log(events.events.SongPlaying.length);
+        var cycling = setInterval(cycleImage, 5000);
+
+}
 // autocomplete thingy
 $("#search").autocomplete({
     source: function (request, response) {
@@ -144,7 +165,7 @@ $("#search").autocomplete({
             playlist.push(song);
             console.log("song", song);
             song.index= playlist.length -1;
-            events.emit('Song Added', song);
+            events.emit('SongAdded', song);
                 if (playlist.length == 1) {
 				playlist[0].play(); // we know its the first track so use 0
                 
@@ -163,7 +184,7 @@ $("#search").autocomplete({
 
 // play and pause button
 document.getElementById('play-pause').addEventListener('click', function(){
-    events.emit('Play-Pause Clicked');
+    events.emit('PlayPauseClicked');
     var index = get_playing();
     // if there are no tracks playing maybe one is paused. try looking for a paused track.
     if(index === -1) {
@@ -174,11 +195,14 @@ document.getElementById('play-pause').addEventListener('click', function(){
         track.player.pause();
         track.is_playing = false;
         track.is_paused = true;
+        events.off('SongPlaying', renderimage);
     }
     else if (track.player && track.is_paused) {
         track.player.play();
         track.is_playing = true;
         track.is_paused = false;
+        events.on('SongPlaying', renderimage);
+        events.emit('SongPlaying');
     }
 });
 
@@ -220,18 +244,7 @@ document.getElementById('previous').addEventListener('click', function(){
         console.log("no previous track to play");
     }
 });
-      
-// queued song listener to play track you click on in the playlist
-/*$(document).on('click', ".queued-song", function(event) {
-    var stopping_song = get_playing();
-    if(stopping_song === -1) {
-        stopping_song = get_paused();
-        playlist[stopping_song].is_paused = false;
-    }
-    playlist[stopping_song].is_playing = false;
-    var index = index_of(parseInt(this.id, radix));
-    playlist[index].play();
-});*/
+//play when song in side menu is clicked
 $(document).on('click', ".queued-song", function(event) {
     var stopping_song = get_playing();
     if(stopping_song === -1) {
@@ -256,44 +269,4 @@ $(function() {
                 list.classList.add("hide-list");
             }
     });
-});
-
-// resize canvas
-$(function() {
-    var canvas = document.getElementById("MainCanvas");
-    var context = canvas.getContext("2d");
-    var listButton = document.getElementById('toggle-list');
-    var list = document.getElementById('screen-wrapper');
-    window.onresize = resizeCanvas;
-        initialize();
-    function  initialize() {
-        listButton.addEventListener('click', resizeCanvas);
-        resizeCanvas();
-    }
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        redraw();
-    }
-    function redraw() {
-        var imageObj = new Image();
-        imageObj.src = "images/Boose Boosington.jpg";
-        imageObj.onload = function () {
-        context.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
-        };
-    }
-    
-});
-
-// draw canvas
-$(function() {
-var imageObj = new Image();
-imageObj.onload = function () {
-    canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        canvas.width = canvas.height *
-                    (canvas.clientWidth / canvas.clientHeight);
-    context.drawImage(imageObj, 0, 0, canvas.width, canvas.height);
-};
 });
