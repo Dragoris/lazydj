@@ -73,6 +73,11 @@ track.prototype.play = function(){
         player.seek(0);
         player.play();
         playlist[index].is_playing = true;
+        var songTitle = playlist[index].title;
+        events.emit('CurrentSong', songTitle);
+        if(events.events.SongPlaying.length===0){
+            events.emit('SongPlaying');
+        }
         
         // play next song (if there is one) after the current is finished
         playlist[index].player.on('finish', function () {
@@ -92,13 +97,13 @@ track.prototype.play = function(){
 events.on('SongAdded', renderSideMenu);
 events.on('CurrentSong', renderTitleBox);
 events.on('PlayPauseClicked', togglePlayPause);
-events.on('SongAdded', renderimage);
 events.on('SongPlaying', renderimage);
+events.on('StartImages', renderimage);
 function renderSideMenu(song){
     console.log('im rendered', song);
     // sending HTML to the side menu
      $(".playlist").append('<div class="queued-song" id ='+song.index+'><img class="album-art" src='+
-        song.artwork_url+'>'+'<div class= "song-title">'+
+        song.art_uri+'>'+'<div class= "song-title">'+
         song.title+'</div>'+'<div class ="user-avatar"> <a href ='+
         song.permalink_url+ ' target="_blank"><img src ='+
         song.avatar_url+' </a><div class ="user-name"> Upladed by: '+song.username+ '</div></div>');
@@ -107,9 +112,9 @@ function renderSideMenu(song){
         console.log(this);
     });
 }
-function renderTitleBox(currentSong){
-    $(".title-box").text(currentSong.title);
-    console.log('titlebox', currentSong.title);
+function renderTitleBox(songTitle){
+    $(".title-box").text(songTitle);
+    console.log('titlebox', songTitle);
 }
 function togglePlayPause(toggle){
     var file= "file:///C:/Users/Katelyn/Desktop/GitHub/lazydj/images/";
@@ -123,19 +128,19 @@ function renderimage(change){
     var file= "file:///C:/Users/Katelyn/Desktop/GitHub/lazydj/images/Backgrounds/";
     var backgoundImages = [file+'1.jpg', file+'2.jpg', file+'3.jpg', file+'4.jpg', file+'5.jpg',
      file+'6.jpg', file+'7.jpg', file+'8.jpg', file+'9.jpg'];
-    var imageIndex = 0;
+    var imageIndex;
     function cycleImage(){
         console.log('im cycling', backgoundImages[imageIndex]);
-        console.log(events.events, events.events.SongPlaying.length);
+        imageIndex = Math.floor(Math.random() * (backgoundImages.length - 1)) + 1;
         document.getElementById('Main').setAttribute("src", backgoundImages[imageIndex]);
-        imageIndex = (imageIndex + 1) % backgoundImages.length;
+        console.log(imageIndex);
+        console.log(events.events.SongPlaying.length);
         if(events.events.SongPlaying.length===0){
             console.log('paused');
             clearInterval(cycling);
         }
 
     }
-        console.log(events.events.SongPlaying.length);
         var cycling = setInterval(cycleImage, 5000);
 
 }
@@ -168,6 +173,7 @@ $("#search").autocomplete({
             events.emit('SongAdded', song);
                 if (playlist.length == 1) {
 				playlist[0].play(); // we know its the first track so use 0
+                events.emit('StartImages');
                 
 			}
 		});
@@ -250,9 +256,10 @@ $(document).on('click', ".queued-song", function(event) {
     if(stopping_song === -1) {
         stopping_song = get_paused();
         playlist[stopping_song].is_paused = false;
+        events.emit('PlayPauseClicked');
+        events.emit('SongPlaying');
     }
     playlist[stopping_song].is_playing = false;
-    
     playlist[parseInt(this.id)].play();
 });
 
@@ -269,4 +276,7 @@ $(function() {
                 list.classList.add("hide-list");
             }
     });
+});
+$(window).resize(function() {
+    $('site-wrapper').css('height', window.innerHeight);
 });
