@@ -106,7 +106,7 @@ function renderSideMenu(song){
         song.art_uri+'>'+'<div class= "song-title">'+
         song.title+'</div>'+'<div class ="user-avatar"> <a href ='+
         song.permalink_url+ ' target="_blank"><img src ='+
-        song.avatar_url+' </a><div class ="user-name"> Upladed by: '+song.username+ '</div></div>');
+        song.avatar_url+' </a><div class ="user-name"> Upladed by: '+song.user+ '</div></div>');
     $('img').error(function(){ //back up img if .artwork_url=null
         $(this).attr('src', 'http://gfm.fm/assets/img/default-albumart.png');
         console.log(this);
@@ -127,19 +127,21 @@ function togglePlayPause(toggle){
 function renderimage(change){
     var file= "file:///C:/Users/Katelyn/Desktop/GitHub/lazydj/images/Backgrounds/";
     var backgoundImages = [file+'1.jpg', file+'2.jpg', file+'3.jpg', file+'4.jpg', file+'5.jpg',
-     file+'6.jpg', file+'7.jpg', file+'8.jpg', file+'9.jpg'];
+     file+'6.jpg', file+'7.jpg', file+'8.jpg', file+'9.jpg', file+'10.jpg', file+'11.jpg',
+     file+'12.jpg', file+'13.jpg', file+'14.jpg', file+'15.jpg', file+'16.jpg', file+'17.jpg',
+     file+'18.jpg', file+'19.jpg', file+'20.jpg'];
     var imageIndex;
     function cycleImage(){
         console.log('im cycling', backgoundImages[imageIndex]);
-        imageIndex = Math.floor(Math.random() * (backgoundImages.length - 1)) + 1;
-        document.getElementById('Main').setAttribute("src", backgoundImages[imageIndex]);
-        console.log(imageIndex);
-        console.log(events.events.SongPlaying.length);
+        $("#Main").fadeOut( "slow", "linear", function(){
+            imageIndex = Math.floor(Math.random() * (backgoundImages.length - 1)) + 1;
+            $("#Main").attr("src", backgoundImages[imageIndex]);
+            $("#Main").fadeIn('slow', "linear");
+        });
         if(events.events.SongPlaying.length===0){
-            console.log('paused');
+            console.log('paused images');
             clearInterval(cycling);
         }
-
     }
         var cycling = setInterval(cycleImage, 5000);
 
@@ -217,6 +219,7 @@ document.getElementById('next').addEventListener('click', function(){
     var index = get_playing();
     if(index === -1) {
         index = get_paused();
+        events.emit('PlayPauseClicked');
     }
     var next_index = index + 1;
     console.log("next index is_playing", index);
@@ -237,6 +240,7 @@ document.getElementById('previous').addEventListener('click', function(){
     var index = get_playing();
     if(index === -1) {
         index = get_paused();
+        events.emit('PlayPauseClicked');
     }
     var prev_index = index - 1;
     if (prev_index >= 0) {
@@ -276,7 +280,4 @@ $(function() {
                 list.classList.add("hide-list");
             }
     });
-});
-$(window).resize(function() {
-    $('site-wrapper').css('height', window.innerHeight);
 });

@@ -1,47 +1,47 @@
 html, body{
     padding: 0;
     margin: 0;
+    background-color: #000;
 }
 #site-wrapper{
     position: relative;
-    overflow: hidden;
     background-color: #000;
-    height:100vh;
 }
 
 /* Side Sliding Menu */
 #screen-wrapper{
-        -webkit-transform: translateX(0);
-        -ms-transform: translateX(0);
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
     transform: translateX(0);
-        -webkit-transition: 300ms ease all;
-    transition: 300ms ease all;
+    -webkit-transition: .7s ease all;
+        transition: .7s ease all;
 
 }
 #offscreen-list{
     width: 31vw;
-    height: 100vh;
+    height: 100%;
     position: absolute;
     top: 0;
     background: #00695c;
     z-index: 0;
-        -webkit-transform: translateX(-31vw);
-        -ms-transform:translateX(-31vw);
-    transform: translateX(-31vw);
+    -webkit-transform: translateX(-31vw);
+    -ms-transform:translateX(-31vw);
+        transform: translateX(-31vw);
 }
 .toggle-parent{
     width: 100%;
 }
 #toggle-list{
-    position: absolute;
+    position: fixed;
     top: 50%;
     width: 7%;
     height: 7%;
+    z-index: 2;
 }
 #screen-wrapper.hide-list {
-        -webkit-transform: translateX(31vw);
-        -ms-transform: translateX(31vw);
-    transform: translateX(31vw);
+    -webkit-transform: translateX(31vw);
+    -ms-transform: translateX(31vw);
+        transform: translateX(31vw);
 }
 #playlist-holder{
     overflow: hidden;
@@ -49,11 +49,11 @@ html, body{
     width: 31vw;
 }
 .playlist { /* Ul containing li's of queued songs*/
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -ms-flexbox;
-    display: flex;
--webkit-flex-flow: column nowrap;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+        display: flex;
+    -webkit-flex-flow: column nowrap;
     -ms-flex-flow: column nowrap;
         flex-flow: column nowrap;
     padding: 0;
@@ -75,10 +75,10 @@ html, body{
     font-family: arial;
     width: 100%;
     /* loading li's sliding into place*/
-    -webkit-animation: playlist-animation .5s ease forwards;
-    -moz-animation: playlist-animation .5s ease forwards;
-    -o-animation: playlist-animation .5s ease forwards;
-        animation: playlist-animation .5s ease forwards;
+    -webkit-animation: playlist-animation 1s ease forwards;
+    -moz-animation: playlist-animation 1s ease forwards;
+    -o-animation: playlist-animation 1s ease forwards;
+        animation: playlist-animation 1s ease forwards;
 }
 .album-art {
     flex:1;
@@ -128,25 +128,28 @@ a .user-name{
 @-o-keyframes playlist-animation { from { transform: translateX(-20vw); } to { transform: translateX(0px); }  }
     @keyframes playlist-animation { from { transform: translateX(-20vw); } to { transform: translateX(0px); }  }
 
-/* End of Side Sliding Menu */
 /*full screen resizeable images*/
 #Main{
     max-width: 100%;
-    margin: auto;
+}
+#Main-wrapper{
+      display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #header{
     background: #00695c;
     display: -ms-flexbox;
-        -ms-flex-wrap: wrap;
-        -ms-flex-direction: column;
-        -webkit-flex-flow: row nowrap; 
-    flex-flow: row nowrap; 
+    -ms-flex-wrap: wrap;
+    -ms-flex-direction: column;
+    -webkit-flex-flow: row nowrap; 
+        flex-flow: row nowrap; 
         display: -webkit-box;
     display: flex;
     padding: 0 2%;
-        -webkit-justify-content: space-around;
+    -webkit-justify-content: space-around;
     justify-content: space-around;
-    align-items: center;
+        align-items: center;
 
   
 }
@@ -155,8 +158,6 @@ a .user-name{
     max-height: 125px; 
     min-height: 80px;
     flex:.05;
-
-
 }
 #player{
     display: flex;
@@ -173,7 +174,6 @@ a .user-name{
     margin: .5em;
     padding: .25em;
     fill: #DD5E00;
-
 }
 
 .button{
@@ -203,7 +203,6 @@ a .user-name{
     min-height: 18px;
     font-family: Century Gothic;
 }
-
 /* search bar */
 .ui-autocomplete-loading {
     background: url("images/ui-anim_basic_16x16.gif") right center no-repeat;
