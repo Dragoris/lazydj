@@ -22,7 +22,7 @@ html, body{
     height: 100%;
     position: absolute;
     top: 0;
-    background: #00695c;
+    background: #2b4970;
     z-index: 0;
     -webkit-transform: translateX(-31vw);
     -ms-transform:translateX(-31vw);
@@ -90,7 +90,7 @@ html, body{
     flex:2;
     margin: auto;
     text-align: center;
-    color: #071D1B;
+    color: #051B39;
     background-color: #d5d5d5;
     padding: 0;
     font-size: 1em;
@@ -107,7 +107,7 @@ a .user-name{
     text-align: center; 
     font-family: Century Gothic;
     top: 0;
-    color: #071D1B;
+    color: #051B39;
     opacity: 0;
     height: 100%;
     -webkit-transition: all .5s;
@@ -117,7 +117,7 @@ a .user-name{
 }
 .user-name:hover{
     opacity: 1;
-    background-color: #071D1B;
+    background-color: #051B39;
     color: #d5d5d5;
 
 }
@@ -132,13 +132,11 @@ a .user-name{
 #Main{
     max-width: 100%;
 }
-#Main-wrapper{
-      display: flex;
-  justify-content: center;
-  align-items: center;
+#placeholder{
+
 }
 #header{
-    background: #00695c;
+    background: #2b4970;
     display: -ms-flexbox;
     -ms-flex-wrap: wrap;
     -ms-flex-direction: column;
@@ -155,8 +153,7 @@ a .user-name{
 }
 #logo{
     display: flex;
-    max-height: 125px; 
-    min-height: 80px;
+    height: 80px;
     flex:.05;
 }
 #player{
@@ -178,9 +175,9 @@ a .user-name{
 
 .button{
     width: 23%;
-    height: 45px;
-    filter: drop-shadow(5px 5px 1px #071D1B);
-     -webkit-filter:drop-shadow(5px 5px 1px #071D1B);
+    height: 26px;
+    filter: drop-shadow(5px 5px 1px #051B39);
+     -webkit-filter:drop-shadow(5px 5px 1px #051B39);
 
 }
 .button:hover{
@@ -194,10 +191,10 @@ a .user-name{
 }
 /*displays the current song title*/
 .title-box{
-    border: 2px solid #071D1B;
+    border: 2px solid #051B39;
     border-radius: 5px;
     margin: 0 .5em .5em .5em;
-    color: #071D1B;
+    color: #051B39;
     background-color:  #d5d5d5;
     text-align: center;
     min-height: 18px;
@@ -219,10 +216,10 @@ a .user-name{
 .ui-autocomplete-input{ /* search bar */
     display: flex;
     background-color: #d5d5d5;
-    color: #071D1B;
+    color: #051B39;
     border-style: none;
     outline: none;
-    border: 2px solid #071D1B;
+    border: 2px solid #051B39;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -250,9 +247,6 @@ a .user-name{
         -moz flex-wrap: wrap;
         flex-wrap: wrap;
     }
-    #logo{
-       flex:.05; 
-    } 
     .ui-autocomplete .ui-widget{
         width: 95%;
     }
@@ -284,5 +278,5 @@ a .user-name{
     .playlist, #playlist-holder,.queued-song{
         width: 77vw;
     }
-    
+
 }

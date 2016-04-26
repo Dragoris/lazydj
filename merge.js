@@ -131,9 +131,12 @@ function renderimage(change){
      file+'12.jpg', file+'13.jpg', file+'14.jpg', file+'15.jpg', file+'16.jpg', file+'17.jpg',
      file+'18.jpg', file+'19.jpg', file+'20.jpg'];
     var imageIndex;
+
     function cycleImage(){
         console.log('im cycling', backgoundImages[imageIndex]);
+
         $("#Main").fadeOut( "slow", "linear", function(){
+            document.getElementById('placeholder').style.display = 'none';
             imageIndex = Math.floor(Math.random() * (backgoundImages.length - 1)) + 1;
             $("#Main").attr("src", backgoundImages[imageIndex]);
             $("#Main").fadeIn('slow', "linear");
@@ -144,6 +147,7 @@ function renderimage(change){
         }
     }
         var cycling = setInterval(cycleImage, 5000);
+
 
 }
 // autocomplete thingy
