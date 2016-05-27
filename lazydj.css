@@ -133,7 +133,7 @@ a .user-name{
     max-width: 100%;
 }
 #placeholder{
-
+    margin: 0 auto;
 }
 #header{
     background: #2b4970;
@@ -186,7 +186,7 @@ a .user-name{
 .button:active{
     filter: none;
     -webkit-filter:none;
-    height: 44px; 
+    height: 24px; 
     transition: all .1s ease;
 }
 /*displays the current song title*/
