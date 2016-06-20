@@ -28,14 +28,10 @@ html, body{
     -ms-transform:translateX(-31vw);
         transform: translateX(-31vw);
 }
-.toggle-parent{
-    width: 100%;
-}
 #toggle-list{
     position: fixed;
-    top: 50%;
+    top: 20%;
     width: 7%;
-    height: 7%;
     z-index: 2;
 }
 #screen-wrapper.hide-list {
@@ -129,11 +125,17 @@ a .user-name{
     @keyframes playlist-animation { from { transform: translateX(-20vw); } to { transform: translateX(0px); }  }
 
 /*full screen resizeable images*/
-#Main{
-    max-width: 100%;
-}
-#placeholder{
-    margin: 0 auto;
+
+.main-background{
+
+   width: 100vw;
+   height: 100vw;
+   background: url(images/lazy_dj_logo.png) no-repeat center center; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+      overflow: hidden;
 }
 #header{
     background: #2b4970;
@@ -154,7 +156,6 @@ a .user-name{
 #logo{
     display: flex;
     height: 80px;
-    flex:.05;
 }
 #player{
     display: flex;
@@ -247,6 +248,9 @@ a .user-name{
         -moz flex-wrap: wrap;
         flex-wrap: wrap;
     }
+    body:not(:-moz-handler-blocked) #header { /* browswer specific style for FF*/
+        display: block;
+    }
     .ui-autocomplete .ui-widget{
         width: 95%;
     }
@@ -255,6 +259,9 @@ a .user-name{
     }
     #buttons{
         flex:1;
+    }
+    #logo{
+        margin: 0 auto;
     }
     #button-play-pause, #button-next, #button-previous{
         padding: 2%;

@@ -62,7 +62,7 @@ function track(id, uri, title, user, user_uri, art_uri, avatar_url, permalink_ur
     this.player;
 }
 
-track.prototype.play = function(){
+track.prototype.play = function(){  
     // index of track calling play
     var index = this.index;
     console.log("play index", this.index);
@@ -99,6 +99,7 @@ events.on('CurrentSong', renderTitleBox);
 events.on('PlayPauseClicked', togglePlayPause);
 events.on('SongPlaying', renderimage);
 events.on('StartImages', renderimage);
+
 function renderSideMenu(song){
     console.log('im rendered', song);
     // sending HTML to the side menu
@@ -118,14 +119,16 @@ function renderTitleBox(songTitle){
 }
 function togglePlayPause(toggle){
     var file= "http://dragoris.github.io/lazydj/images/";
-    if (document.getElementById('play-pause').src ==file +"pause.svg"){
+    if (document.getElementById('play-pause').src ===file +"pause.svg"){
         document.getElementById('play-pause').src = file +"play.svg";
-    }else {
-        document.getElementById('play-pause').src = file +"pause.svg";
+        console.log("2");
+    }else{
+        document.getElementById('play-pause').src = file + "pause.svg";
     }
+
 }
 function renderimage(change){
-    var file= "http://dragoris.github.io/lazydj/images/Backgrounds/";
+    var file= "images/Backgrounds/";
     var backgoundImages = [file+'1.jpg', file+'2.jpg', file+'3.jpg', file+'4.jpg', file+'5.jpg',
      file+'6.jpg', file+'7.jpg', file+'8.jpg', file+'9.jpg', file+'10.jpg', file+'11.jpg',
      file+'12.jpg', file+'13.jpg', file+'14.jpg', file+'15.jpg', file+'16.jpg', file+'17.jpg',
@@ -135,11 +138,10 @@ function renderimage(change){
     function cycleImage(){
         console.log('im cycling', backgoundImages[imageIndex]);
 
-        $("#Main").fadeOut( "slow", "linear", function(){
-            document.getElementById('placeholder').style.display = 'none';
+        $(".main-background").fadeOut( "slow", "linear", function(){
             imageIndex = Math.floor(Math.random() * (backgoundImages.length - 1)) + 1;
-            $("#Main").attr("src", backgoundImages[imageIndex]);
-            $("#Main").fadeIn('slow', "linear");
+            $(".main-background").css("background", "url("+backgoundImages[imageIndex]+")no-repeat center center fixed");
+            $(".main-background").fadeIn('slow', "linear");
         });
         if(events.events.SongPlaying.length===0){
             console.log('paused images');
@@ -150,7 +152,7 @@ function renderimage(change){
 
 
 }
-// autocomplete thingy
+// autocomplete
 $("#search").autocomplete({
     source: function (request, response) {
         SC.get('/tracks', {q: request.term}).then(function (results) {
@@ -207,6 +209,7 @@ document.getElementById('play-pause').addEventListener('click', function(){
         track.player.pause();
         track.is_playing = false;
         track.is_paused = true;
+
         events.off('SongPlaying', renderimage);
     }
     else if (track.player && track.is_paused) {
