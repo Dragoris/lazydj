@@ -130,12 +130,11 @@ a .user-name{
 
    width: 100vw;
    height: 100vw;
-   background: url(images/lazy_dj_logo.png) no-repeat center center; 
+   background: url(images/lazy_dj_logo.png) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-      overflow: hidden;
 }
 #header{
     background: #2b4970;
