@@ -3,6 +3,9 @@ html, body{
     margin: 0;
     background-color: #000;
 }
+#flashAudioObject-container{ /*soundcloud generated*/
+    display: none;
+}
 #site-wrapper{
     position: relative;
     background-color: #000;
@@ -30,7 +33,7 @@ html, body{
 }
 #toggle-list{
     position: fixed;
-    top: 20%;
+    top: 50%;
     width: 7%;
     z-index: 2;
 }
@@ -127,14 +130,14 @@ a .user-name{
 /*full screen resizeable images*/
 
 .main-background{
-
-   width: 100vw;
    height: 100vw;
-   background: url(images/lazy_dj_logo.png) no-repeat center center fixed; 
+   max-height: 800px;
+   background: url(images/lazy_dj_logo.png) no-repeat center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  background-origin: border-box;
 }
 #header{
     background: #2b4970;

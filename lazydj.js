@@ -121,7 +121,6 @@ function togglePlayPause(toggle){
     var file= "http://dragoris.github.io/lazydj/images/";
     if (document.getElementById('play-pause').src ===file +"pause.svg"){
         document.getElementById('play-pause').src = file +"play.svg";
-        console.log("2");
     }else{
         document.getElementById('play-pause').src = file + "pause.svg";
     }
@@ -140,8 +139,8 @@ function renderimage(change){
 
         $(".main-background").fadeOut( "slow", "linear", function(){
             imageIndex = Math.floor(Math.random() * (backgoundImages.length - 1)) + 1;
-            $(".main-background").css("background", "url("+backgoundImages[imageIndex]+")no-repeat center center fixed");
-            $(".main-background").fadeIn('slow', "linear");
+            $(".main-background").css("background", "url("+backgoundImages[imageIndex]+")no-repeat 50% 65% fixed");
+            $(".main-background").fadeIn('slow', "linear")
         });
         if(events.events.SongPlaying.length===0){
             console.log('paused images');
