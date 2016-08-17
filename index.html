@@ -2,56 +2,61 @@
 <html lang="en">
 <head>
     <title>LazyDJ</title>
-    <!-- Loading external style sheets -->
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-    
-    <!-- Loading external js libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
-    <!-- Loading our own style sheet -->
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body>
-    <div id= 'container'>
-        <div id ='header'> 
-             <img id= "logo"src="images/lazy_dj_logo.png">
-            <!-- autocomplete search -->
+    <div id="site-wrapper">    
+        <div id= "header-wrapper">
+            <div id ="header"> 
+                 <img id ="logo" src="images/logo.png"></img>
+                <!-- autocomplete search -->
             <div class ="ui-autocomplete">
-             <!-- testing search -->
+             <!-- search -->
                 <div class="ui-widget">
                   <input id="search" placeholder="Build your playlist">
                 </div>
             </div>    
-            <!-- end of autocomplete search -->  
-           
-            <div id="player">
-                <img id="button-previous" src="images/previous.svg"></img>
-                <img id="button-play" src="images/play.svg"></img>
-                <img id="button-next" src="images/next.svg"></img>
-
+                <!-- end of autocomplete search -->  
+               
+                <div id="player">
+                    <div id="buttons-wrapper">
+                         <img class="button" id="previous"src="images/previous.svg"></img>
+                        <img class="button" id="play-pause" src="http://dragoris.github.io/lazydj/images/pause.svg"></img>
+                        <img class="button" id ="next"src="images/next.svg"></img>
+                    </div>
+                    <div class ="title-box"></div>
+                </div>
             </div>
         </div>
-    </div>
+        
+        <div id="screen-wrapper"> <!--keeps slider from going into the header -->
+            <!-- Matt's Slide out bar code -->
+            <div id="toggle-list">
+                <img id="playlistIcon" src="images/playlist.svg"></img>
+            </div>   
+            <div id="offscreen-list">  
+                    <!-- playlist holder -->
+                    <div id="playlist-holder">
+                        <ul class="playlist">
+                        <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="album-art" src=code-->
+                        </ul>
+                    </div>
+            </div>
+            <!-- end of matt's slide out code -->
+        <section class="main-background"></section>
+        </div>
+       </div>
+        <!-- Loading external style sheets -->
+    <link defer rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <!-- Loading external js libraries -->
+    <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script defer src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+    <script defer src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
+    <!-- Loading our own style sheet -->
+    <link rel="stylesheet" type="text/css" href="lazydj.css">
+    <script defer type="text/javascript" src="lazydj.js"></script>
+    </body>
     
-    <div id="screen"> <!--keeps slider from going into the header -->
-        <!-- Matt's Slide out bar code -->
-        <input id="menu-trigger" type="checkbox"/>
-        <label for="menu-trigger">&#9836</label>
-        <!-- playlist holder -->
-        <header>
-            <ul class="playlist">
-                <div id='inject'>
-                </div>
-            <!-- injecting div and li from search selection. <div class="queued-song"><li class="track-playlist"><img class="thumbnail" src=code-->
-            </ul>
-        </header>
-        <!-- end of matt's slide out code -->
-    <!-- Boose's Face = canvas -->
-        <canvas id="MainCanvas"></canvas> 
-    </div>
-   
-<link rel="stylesheet" type="text/css" href="lazydj.css">
-<style type="text/css"></style>
-<script type="text/javascript" src="lazydj.js"></script>
-</body>
+
 </html>
